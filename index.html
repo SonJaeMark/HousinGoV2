@@ -1,0 +1,3625 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HousinGo - Your next home is just a click away</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-primary: #87CEEB;
+      --color-text: #8B4513;
+      --color-background: #F5F5DC;
+      --color-white: #FFFFFF;
+      --color-light-blue: #B0E0E6;
+      --color-dark-brown: #654321;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--color-text);
+      background-color: var(--color-background);
+    }
+
+    .header {
+      background-color: var(--color-white);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-text {
+      font-size: 1.75rem;
+      font-weight: bold;
+      color: var(--color-primary);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background-color: var(--color-white);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 200px;
+      display: none;
+      z-index: 1000;
+    }
+
+    .dropdown-menu.active {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      border-bottom: 1px solid var(--color-background);
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--color-background);
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background-color: var(--color-text);
+      margin: 3px 0;
+      transition: 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+    .nav-link {
+      color: var(--color-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, rgba(135, 206, 235, 0.8) 0%, rgba(176, 224, 230, 0.8) 100%), 
+                  url('https://drive.google.com/uc?export=view&id=1Otfj8yvzi_3hdFQvCKCgMOc8vATv5CuT') center/cover no-repeat;
+      padding: 4rem 2rem;
+      text-align: center;
+      color: var(--color-white);
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .hero-tagline {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    .search-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .sleek-search-bar {
+      background-color: var(--color-white);
+      border-radius: 50px;
+      padding: 0.75rem;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      margin-bottom: 1.5rem;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .sleek-search-bar:hover {
+      box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+      border-color: var(--color-primary);
+    }
+
+    .search-input-group {
+      flex: 2;
+      padding: 0 1rem;
+    }
+
+    .sleek-search-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      color: var(--color-text);
+      background: transparent;
+      padding: 0.5rem 0;
+    }
+
+    .sleek-search-input::placeholder {
+      color: #999;
+      font-weight: 400;
+    }
+
+    .search-divider {
+      width: 1px;
+      height: 30px;
+      background-color: #e0e0e0;
+      margin: 0 0.5rem;
+    }
+
+    .search-select-group {
+      flex: 1;
+      padding: 0 0.5rem;
+    }
+
+    .sleek-search-select {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      color: var(--color-text);
+      background: transparent;
+      padding: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    .sleek-search-select option {
+      color: var(--color-text);
+      background-color: var(--color-white);
+    }
+
+    .search-price-group {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0 0.5rem;
+    }
+
+    .sleek-price-input {
+      width: 60px;
+      border: none;
+      outline: none;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      background: transparent;
+      padding: 0.5rem 0;
+      text-align: center;
+    }
+
+    .sleek-price-input::placeholder {
+      color: #999;
+      font-size: 0.85rem;
+    }
+
+    .price-separator {
+      color: #999;
+      font-weight: bold;
+    }
+
+    .sleek-search-button {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-dark-brown));
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(135, 206, 235, 0.3);
+    }
+
+    .sleek-search-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(135, 206, 235, 0.4);
+    }
+
+    .search-icon {
+      font-size: 1.2rem;
+      color: var(--color-white);
+    }
+
+    .advanced-filters {
+      background-color: var(--color-white);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .cta-button {
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      min-width: 160px;
+    }
+
+    .cta-button.primary {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      box-shadow: 0 4px 12px rgba(135, 206, 235, 0.3);
+    }
+
+    .cta-button.primary:hover {
+      background-color: var(--color-dark-brown);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(135, 206, 235, 0.4);
+    }
+
+    .cta-button.secondary {
+      background-color: transparent;
+      color: var(--color-text);
+      border: 2px solid var(--color-primary);
+    }
+
+    .cta-button.secondary:hover {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      transform: translateY(-2px);
+    }
+
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: var(--color-dark-brown);
+    }
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-button {
+      background-color: var(--color-white);
+      color: var(--color-text);
+      border: 2px solid var(--color-primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .filter-button:hover,
+    .filter-button.active {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    .properties-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .property-card {
+      background-color: var(--color-white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+
+    .property-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .property-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      background-color: var(--color-light-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .property-info {
+      padding: 1.5rem;
+    }
+
+    .property-type {
+      display: inline-block;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .property-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: var(--color-dark-brown);
+    }
+
+    .property-location {
+      color: var(--color-text);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .property-price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+
+    .property-amenities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .amenity-tag {
+      background-color: var(--color-background);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+    }
+
+    .view-details-btn {
+      width: 100%;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .view-details-btn:hover {
+      background-color: var(--color-dark-brown);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.25rem;
+      color: var(--color-text);
+    }
+
+    .error-message {
+      background-color: #ffebee;
+      color: #c62828;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 2000;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal-content {
+      background-color: var(--color-white);
+      border-radius: 12px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--color-white);
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+
+    .modal-images {
+      width: 100%;
+      height: 400px;
+      background-color: var(--color-light-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+      position: relative;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .modal-header {
+      margin-bottom: 2rem;
+    }
+
+    .modal-title {
+      font-size: 2rem;
+      color: var(--color-dark-brown);
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-location {
+      font-size: 1.125rem;
+      color: var(--color-text);
+      margin-bottom: 1rem;
+    }
+
+    .modal-price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--color-primary);
+    }
+
+    .modal-section {
+      margin-bottom: 2rem;
+    }
+
+    .modal-section-title {
+      font-size: 1.5rem;
+      color: var(--color-dark-brown);
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--color-primary);
+      padding-bottom: 0.5rem;
+    }
+
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .amenity-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background-color: var(--color-background);
+      border-radius: 8px;
+    }
+
+    .contact-info {
+      background-color: var(--color-background);
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .contact-item {
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-button {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    .contact-button:hover {
+      background-color: var(--color-dark-brown);
+    }
+
+    .footer {
+      background-color: var(--color-dark-brown);
+      color: var(--color-white);
+      padding: 2rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      margin-bottom: 0.5rem;
+    }
+
+    .page-content {
+      display: none;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      min-height: 60%;
+    }
+
+    .page-content.active {
+      display: block;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      color: var(--color-dark-brown);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: var(--color-white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--color-light-blue);
+      border-radius: 8px;
+      font-size: 1rem;
+      color: var(--color-text);
+      background-color: var(--color-white);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--color-primary);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-checkbox input {
+      margin: 0;
+    }
+
+    .form-button {
+      width: 100%;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-bottom: 1rem;
+    }
+
+    .form-button:hover {
+      background-color: var(--color-dark-brown);
+    }
+
+    .social-login {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-button {
+      flex: 1;
+      padding: 0.75rem;
+      border: 2px solid var(--color-primary);
+      background-color: var(--color-white);
+      color: var(--color-text);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .social-button:hover {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    .about-content {
+      background-color: var(--color-white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      line-height: 1.8;
+    }
+
+    .about-section {
+      margin-bottom: 2rem;
+    }
+
+    .about-section h3 {
+      color: var(--color-primary);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .faq-item {
+      background-color: var(--color-white);
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .faq-question {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: 1rem;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .faq-question:hover {
+      background-color: var(--color-dark-brown);
+    }
+
+    .faq-answer {
+      padding: 1.5rem;
+      display: none;
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    .faq-answer.active {
+      display: block;
+    }
+
+    .faq-steps {
+      margin: 1rem 0;
+      padding-left: 1rem;
+    }
+
+    .faq-steps li {
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .dashboard-title {
+      font-size: 2rem;
+      color: var(--color-dark-brown);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background-color: var(--color-white);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--color-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: var(--color-text);
+      font-size: 0.95rem;
+    }
+
+    .dashboard-section {
+      background-color: var(--color-white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h3 {
+      font-size: 1.5rem;
+      color: var(--color-dark-brown);
+    }
+
+    .action-button {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .action-button:hover {
+      background-color: var(--color-dark-brown);
+    }
+
+    .action-button.secondary {
+      background-color: transparent;
+      color: var(--color-primary);
+      border: 2px solid var(--color-primary);
+    }
+
+    .action-button.secondary:hover {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    .action-button.danger {
+      background-color: #dc3545;
+    }
+
+    .action-button.danger:hover {
+      background-color: #c82333;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-background);
+    }
+
+    .data-table th {
+      background-color: var(--color-background);
+      font-weight: bold;
+      color: var(--color-dark-brown);
+    }
+
+    .data-table tr:hover {
+      background-color: var(--color-background);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .status-badge.pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .status-badge.approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-badge.active {
+      background-color: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status-badge.occupied {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-badge.draft {
+      background-color: #e2e3e5;
+      color: #383d41;
+    }
+
+    .property-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .form-full-width {
+      grid-column: 1 / -1;
+    }
+
+    .image-upload-area {
+      border: 2px dashed var(--color-primary);
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .image-upload-area:hover {
+      background-color: var(--color-background);
+    }
+
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .image-preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: var(--color-light-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .image-remove-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: rgba(220, 53, 69, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .amenities-checklist {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background-color: var(--color-background);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .checkbox-item:hover {
+      background-color: var(--color-light-blue);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .message-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .message-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--color-background);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .message-item:hover {
+      background-color: var(--color-background);
+    }
+
+    .message-item.unread {
+      background-color: #e3f2fd;
+      font-weight: bold;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .message-sender {
+      font-weight: bold;
+      color: var(--color-dark-brown);
+    }
+
+    .message-time {
+      font-size: 0.875rem;
+      color: #666;
+    }
+
+    .message-preview {
+      color: var(--color-text);
+      font-size: 0.95rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .property-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .table-container {
+        overflow-x: scroll;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100% - 80px);
+        background-color: var(--color-white);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        transition: left 0.3s ease;
+        padding-top: 2rem;
+        gap: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        z-index: 999;
+      }
+
+      .nav-menu.active {
+        left: 0;
+      }
+
+      .nav-menu li {
+        margin: 0;
+      }
+
+      .nav-link {
+        font-size: 1.2rem;
+        padding: 1rem 2rem;
+        display: block;
+        width: 200px;
+        text-align: center;
+        border-radius: 8px;
+        transition: all 0.3s;
+      }
+
+      .nav-link:hover {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-tagline {
+        font-size: 1.125rem;
+      }
+
+      .sleek-search-bar {
+        flex-direction: column;
+        padding: 1rem;
+        border-radius: 15px;
+        gap: 1rem;
+      }
+
+      .search-input-group,
+      .search-select-group,
+      .search-price-group {
+        flex: none;
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid var(--color-light-blue);
+        border-radius: 8px;
+      }
+
+      .search-divider {
+        display: none;
+      }
+
+      .sleek-search-button {
+        width: 100%;
+        border-radius: 8px;
+        height: 45px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .cta-button {
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .properties-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-images {
+        height: 250px;
+      }
+
+      .form-container {
+        margin: 0 1rem;
+      }
+
+      .social-login {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <header class="header">
+   <div class="header-container">
+    <div class="logo"><span class="logo-text" id="site-name">HousinGo</span>
+    </div>
+    <nav>
+     <div class="hamburger" id="hamburger"><span></span> <span></span> <span></span>
+     </div>
+     <ul class="nav-menu" id="nav-menu">
+      <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+      <li><a href="#" class="nav-link" data-page="about">About Us</a></li>
+      <li class="auth-only" style="display: none;"><a href="#" class="nav-link" id="dashboard-link">Dashboard</a></li>
+      <li class="guest-only"><a href="#" class="nav-link" data-page="login">Log In</a></li>
+      <li class="guest-only"><a href="#" class="nav-link" data-page="register">Register</a></li>
+      <li><a href="#" class="nav-link" data-page="contact">Contact Us</a></li>
+      <li><a href="#" class="nav-link" data-page="help">Help</a></li>
+      <li class="auth-only user-menu" style="display: none;">
+       <div class="user-avatar" id="user-avatar">
+        U
+       </div>
+       <div class="dropdown-menu" id="user-dropdown">
+        <div class="dropdown-item" id="profile-link">
+         👤 My Profile
+        </div>
+        <div class="dropdown-item" id="logout-link">
+         🚪 Logout
+        </div>
+       </div></li>
+     </ul>
+    </nav>
+   </div>
+  </header><!-- Home Page -->
+  <div id="home-page" class="page-content active">
+   <section class="hero">
+    <div class="hero-content">
+     <h1 class="hero-title" id="hero-title">HousinGo</h1>
+     <p class="hero-tagline" id="tagline">Your next home is just a click away.</p>
+     <div class="search-container">
+      <div class="sleek-search-bar">
+       <div class="search-input-group"><input type="text" class="sleek-search-input" id="location-filter" placeholder="Property name, city, barangay, or address...">
+       </div>
+       <div class="search-divider"></div>
+       <div class="search-select-group"><select class="sleek-search-select" id="type-filter"> <option value="">Property Type</option> <option value="Single Family">Single Family</option> <option value="Single Room">Single Room</option> <option value="Boarding House">Boarding House</option> <option value="Studio Type">Studio Type</option> <option value="Bedspace">Bedspace</option> </select>
+       </div>
+       <div class="search-divider"></div>
+       <div class="search-price-group"><input type="number" class="sleek-price-input" id="min-price" placeholder="Min ₱"> <span class="price-separator">-</span> <input type="number" class="sleek-price-input" id="max-price" placeholder="Max ₱">
+       </div><button class="sleek-search-button" id="search-button"> <span class="search-icon">🔍</span> </button>
+      </div>
+      <div class="cta-buttons"><button class="cta-button primary" id="browse-properties">Browse Properties</button> <button class="cta-button secondary" id="create-account">Create Account</button>
+      </div>
+     </div>
+    </div>
+   </section>
+   <main class="main-content">
+    <h2 class="section-title">Available Properties</h2>
+    <div class="filters" id="filters"><button class="filter-button active" data-filter="all">All Properties</button> <button class="filter-button" data-filter="Single Family">Single Family</button> <button class="filter-button" data-filter="Single Room">Single Room</button> <button class="filter-button" data-filter="Boarding House">Boarding House</button> <button class="filter-button" data-filter="Studio Type">Studio Type</button> <button class="filter-button" data-filter="Bedspace">Bedspace</button>
+    </div>
+    <div id="error-container"></div>
+    <div id="loading" class="loading">
+     Loading properties...
+    </div>
+    <div class="properties-grid" id="properties-grid"></div>
+   </main>
+  </div><!-- About Us Page -->
+  <div id="about-page" class="page-content">
+   <h1 class="page-title">About HousinGo</h1>
+   <div class="about-content">
+    <div class="about-section">
+     <h3>🏠 Our Mission</h3>
+     <p>HousinGo is created to provide an accessible, digital platform for house seekers and landlords in Brgy. East Rembo, Taguig City. Our goal is to make property searching efficient, transparent, and community-focused.</p>
+    </div>
+    <div class="about-section">
+     <h3>🎯 What We Do</h3>
+     <p>We connect tenants with quality rental properties while providing landlords with a reliable platform to showcase their available spaces. Our comprehensive system includes detailed property listings, amenity tracking, and direct communication tools.</p>
+    </div>
+    <div class="about-section">
+     <h3>🌟 Why Choose HousinGo?</h3>
+     <ul>
+      <li><strong>Local Focus:</strong> Specialized in Brgy. East Rembo, Taguig City properties</li>
+      <li><strong>Verified Listings:</strong> All properties are reviewed before publication</li>
+      <li><strong>Easy Communication:</strong> Direct messaging between tenants and landlords</li>
+      <li><strong>Detailed Information:</strong> Comprehensive property details and amenities</li>
+      <li><strong>Mobile Friendly:</strong> Access from any device, anywhere</li>
+     </ul>
+    </div>
+    <div class="about-section">
+     <h3>🤝 Our Community</h3>
+     <p>We believe in building stronger communities through better housing connections. By focusing on local properties and fostering transparent communication, we help create lasting relationships between tenants and landlords.</p>
+    </div>
+   </div>
+  </div><!-- Login Page -->
+  <div id="login-page" class="page-content">
+   <h1 class="page-title">Log In to HousinGo</h1>
+   <div class="form-container">
+    <form id="login-form">
+     <div class="form-group"><label for="login-email" class="form-label">Email Address</label> <input type="email" id="login-email" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="login-password" class="form-label">Password</label> <input type="password" id="login-password" class="form-input" required>
+     </div>
+     <div class="form-checkbox"><input type="checkbox" id="remember-me"> <label for="remember-me">Remember Me</label>
+     </div><button type="submit" class="form-button">Log In</button>
+     <div style="text-align: center; margin: 1rem 0; color: var(--color-text);">
+      Or continue with:
+     </div>
+     <div class="social-login"><button type="button" class="social-button">📘 Facebook</button> <button type="button" class="social-button">🔍 Google</button>
+     </div>
+    </form>
+   </div>
+  </div><!-- Register Page -->
+  <div id="register-page" class="page-content">
+   <h1 class="page-title">Create Your Account</h1>
+   <div class="form-container">
+    <form id="register-form">
+     <div class="form-group"><label for="first-name" class="form-label">First Name</label> <input type="text" id="first-name" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="last-name" class="form-label">Last Name</label> <input type="text" id="last-name" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="register-email" class="form-label">Email Address</label> <input type="email" id="register-email" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="mobile-number" class="form-label">Mobile Number</label> <input type="tel" id="mobile-number" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="user-role" class="form-label">Register as</label> <select id="user-role" class="form-select" required> <option value="">Select Role</option> <option value="Tenant">Tenant</option> <option value="Landlord">Landlord</option> </select>
+     </div>
+     <div class="form-group"><label for="register-password" class="form-label">Password</label> <input type="password" id="register-password" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="confirm-password" class="form-label">Confirm Password</label> <input type="password" id="confirm-password" class="form-input" required>
+     </div><button type="submit" class="form-button">Create Account</button>
+    </form>
+   </div>
+  </div><!-- Contact Us Page -->
+  <div id="contact-page" class="page-content">
+   <h1 class="page-title">Contact Us</h1>
+   <div class="form-container">
+    <form id="contact-form">
+     <div class="form-group"><label for="contact-name" class="form-label">Name</label> <input type="text" id="contact-name" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="contact-mobile" class="form-label">Mobile Number</label> <input type="tel" id="contact-mobile" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="contact-email" class="form-label">Email Address</label> <input type="email" id="contact-email" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="contact-subject" class="form-label">Subject</label> <input type="text" id="contact-subject" class="form-input" required>
+     </div>
+     <div class="form-group"><label for="contact-message" class="form-label">Message</label> <textarea id="contact-message" class="form-textarea" required></textarea>
+     </div><button type="submit" class="form-button">Send Message</button>
+    </form>
+   </div>
+  </div><!-- Admin Dashboard -->
+  <div id="admin-dashboard-page" class="page-content">
+   <div class="dashboard-container">
+    <div class="dashboard-header">
+     <h1 class="dashboard-title">Admin Dashboard</h1>
+    </div>
+    <div class="stats-grid">
+     <div class="stat-card">
+      <div class="stat-icon">
+       🏠
+      </div>
+      <div class="stat-value" id="admin-total-properties">
+       0
+      </div>
+      <div class="stat-label">
+       Total Properties
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       👥
+      </div>
+      <div class="stat-value" id="admin-total-users">
+       0
+      </div>
+      <div class="stat-label">
+       Registered Users
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       ⏳
+      </div>
+      <div class="stat-value" id="admin-pending-properties">
+       0
+      </div>
+      <div class="stat-label">
+       Pending Approvals
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       📊
+      </div>
+      <div class="stat-value" id="admin-monthly-views">
+       0
+      </div>
+      <div class="stat-label">
+       Monthly Views
+      </div>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>Pending Property Approvals</h3>
+     </div>
+     <div class="table-container">
+      <table class="data-table" id="admin-pending-table">
+       <thead>
+        <tr>
+         <th>Property Type</th>
+         <th>Location</th>
+         <th>Landlord</th>
+         <th>Monthly Rent</th>
+         <th>Submitted</th>
+         <th>Actions</th>
+        </tr>
+       </thead>
+       <tbody id="admin-pending-tbody">
+        <tr>
+         <td colspan="6" class="empty-state">
+          <div class="empty-state-icon">
+           📋
+          </div><p>No pending approvals</p></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>User Management</h3>
+     </div>
+     <div class="table-container">
+      <table class="data-table" id="admin-users-table">
+       <thead>
+        <tr>
+         <th>Name</th>
+         <th>Email</th>
+         <th>Role</th>
+         <th>Status</th>
+         <th>Joined</th>
+         <th>Actions</th>
+        </tr>
+       </thead>
+       <tbody id="admin-users-tbody">
+        <tr>
+         <td colspan="6" class="empty-state">
+          <div class="empty-state-icon">
+           👥
+          </div><p>No users found</p></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>Recent Reports &amp; Feedback</h3>
+     </div>
+     <div class="message-list" id="admin-reports-list">
+      <div class="empty-state">
+       <div class="empty-state-icon">
+        📝
+       </div>
+       <p>No reports or feedback</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Tenant Dashboard -->
+  <div id="tenant-dashboard-page" class="page-content">
+   <div class="dashboard-container">
+    <div class="dashboard-header">
+     <h1 class="dashboard-title">My Dashboard</h1>
+    </div>
+    <div class="stats-grid">
+     <div class="stat-card">
+      <div class="stat-icon">
+       ❤️
+      </div>
+      <div class="stat-value" id="tenant-saved-count">
+       0
+      </div>
+      <div class="stat-label">
+       Saved Properties
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       💬
+      </div>
+      <div class="stat-value" id="tenant-messages-count">
+       0
+      </div>
+      <div class="stat-label">
+       Messages
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       ⭐
+      </div>
+      <div class="stat-value" id="tenant-reviews-count">
+       0
+      </div>
+      <div class="stat-label">
+       My Reviews
+      </div>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>My Saved Properties</h3><button class="action-button secondary" onclick="showPage('home')">Browse More</button>
+     </div>
+     <div class="properties-grid" id="tenant-saved-properties">
+      <div class="empty-state">
+       <div class="empty-state-icon">
+        ❤️
+       </div>
+       <p>No saved properties yet. Start browsing to save your favorites!</p>
+      </div>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>Messages with Landlords</h3>
+     </div>
+     <div class="message-list" id="tenant-messages-list">
+      <div class="empty-state">
+       <div class="empty-state-icon">
+        💬
+       </div>
+       <p>No messages yet</p>
+      </div>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>My Reviews</h3>
+     </div>
+     <div id="tenant-reviews-list">
+      <div class="empty-state">
+       <div class="empty-state-icon">
+        ⭐
+       </div>
+       <p>You haven't left any reviews yet</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Landlord Dashboard -->
+  <div id="landlord-dashboard-page" class="page-content">
+   <div class="dashboard-container">
+    <div class="dashboard-header">
+     <h1 class="dashboard-title">Landlord Dashboard</h1><button class="action-button" onclick="showPage('post-property')">+ Post New Property</button>
+    </div>
+    <div class="stats-grid">
+     <div class="stat-card">
+      <div class="stat-icon">
+       🏠
+      </div>
+      <div class="stat-value" id="landlord-total-properties">
+       0
+      </div>
+      <div class="stat-label">
+       Total Properties
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       ✅
+      </div>
+      <div class="stat-value" id="landlord-available-properties">
+       0
+      </div>
+      <div class="stat-label">
+       Available
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       🔒
+      </div>
+      <div class="stat-value" id="landlord-occupied-properties">
+       0
+      </div>
+      <div class="stat-label">
+       Occupied
+      </div>
+     </div>
+     <div class="stat-card">
+      <div class="stat-icon">
+       💬
+      </div>
+      <div class="stat-value" id="landlord-messages-count">
+       0
+      </div>
+      <div class="stat-label">
+       New Messages
+      </div>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>My Properties</h3>
+     </div>
+     <div class="table-container">
+      <table class="data-table" id="landlord-properties-table">
+       <thead>
+        <tr>
+         <th>Property Type</th>
+         <th>Location</th>
+         <th>Monthly Rent</th>
+         <th>Status</th>
+         <th>Posted</th>
+         <th>Actions</th>
+        </tr>
+       </thead>
+       <tbody id="landlord-properties-tbody">
+        <tr>
+         <td colspan="6" class="empty-state">
+          <div class="empty-state-icon">
+           🏠
+          </div><p>No properties posted yet. Click "Post New Property" to get started!</p></td>
+        </tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>Tenant Messages</h3>
+     </div>
+     <div class="message-list" id="landlord-messages-list">
+      <div class="empty-state">
+       <div class="empty-state-icon">
+        💬
+       </div>
+       <p>No messages from tenants yet</p>
+      </div>
+     </div>
+    </div>
+    <div class="dashboard-section">
+     <div class="section-header">
+      <h3>Property Ratings &amp; Feedback</h3>
+     </div>
+     <div id="landlord-reviews-list">
+      <div class="empty-state">
+       <div class="empty-state-icon">
+        ⭐
+       </div>
+       <p>No reviews yet</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Post Property Page -->
+  <div id="post-property-page" class="page-content">
+   <div class="dashboard-container">
+    <h1 class="page-title">Post New Property</h1>
+    <div class="dashboard-section">
+     <form id="post-property-form">
+      <div class="form-group form-full-width"><label class="form-label">Property Photos (Required: 5-10 images, max 30MB each)</label>
+       <div class="image-upload-area" id="image-upload-area">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">
+         📷
+        </div>
+        <p>Click to upload or drag and drop images here</p>
+        <p style="font-size: 0.875rem; color: #666; margin-top: 0.5rem;">Minimum 5 images required, maximum 10 images allowed</p><input type="file" id="property-images" accept="image/*" multiple style="display: none;">
+       </div>
+       <div class="image-preview-grid" id="image-preview-grid"></div>
+      </div>
+      <h3 style="grid-column: 1 / -1; color: var(--color-dark-brown); margin-top: 1rem;">Property Details</h3>
+      <div class="property-form-grid">
+       <div class="form-group"><label for="property-type" class="form-label">Type of Rental</label> <select id="property-type" class="form-select" required> <option value="">Select Type</option> <option value="Single Family">Single Family</option> <option value="Single Room">Single Room</option> <option value="Boarding House">Boarding House</option> <option value="Studio Type">Studio Type</option> <option value="Bedspace">Bedspace</option> </select>
+       </div>
+       <div class="form-group"><label for="monthly-rent" class="form-label">Monthly Rent (₱)</label> <input type="number" id="monthly-rent" class="form-input" min="0" step="100" required>
+       </div>
+       <div class="form-group"><label for="available-slots" class="form-label">Available Slots / Rooms</label> <input type="number" id="available-slots" class="form-input" min="1" required>
+       </div>
+      </div>
+      <h3 style="grid-column: 1 / -1; color: var(--color-dark-brown); margin-top: 1rem;">Location Details</h3>
+      <div class="property-form-grid">
+       <div class="form-group form-full-width"><label for="property-address" class="form-label">Complete Address</label> <input type="text" id="property-address" class="form-input" placeholder="Street, Barangay, City" required>
+       </div>
+       <div class="form-group"><label for="property-barangay" class="form-label">Barangay</label> <input type="text" id="property-barangay" class="form-input" required>
+       </div>
+       <div class="form-group"><label for="property-city" class="form-label">City</label> <input type="text" id="property-city" class="form-input" required>
+       </div>
+       <div class="form-group form-full-width"><label for="nearby-landmarks" class="form-label">Nearby Landmarks</label> <input type="text" id="nearby-landmarks" class="form-input" placeholder="e.g., Near SM Mall, 5 mins from MRT">
+       </div>
+       <div class="form-group form-full-width"><label for="loc-link" class="form-label">Google Map Link (Optional)</label> <input type="url" id="loc-link" class="form-input" placeholder="Paste Google Maps link here">
+       </div>
+      </div>
+      <div class="form-group form-full-width"><label for="property-description" class="form-label">Description</label> <textarea id="property-description" class="form-textarea" placeholder="Describe your property..." required></textarea>
+      </div>
+      <h3 style="grid-column: 1 / -1; color: var(--color-dark-brown); margin-top: 1rem;">Amenities &amp; Inclusions</h3>
+      <div class="form-group form-full-width">
+       <div class="amenities-checklist"><label class="checkbox-item"> <input type="checkbox" name="amenity" value="Wi-Fi"> <span>📶 Wi-Fi</span> </label> <label class="checkbox-item"> <input type="checkbox" name="amenity" value="Aircon"> <span>❄️ Aircon</span> </label> <label class="checkbox-item"> <input type="checkbox" name="amenity" value="Water Included"> <span>💧 Water Included</span> </label> <label class="checkbox-item"> <input type="checkbox" name="amenity" value="Electric Included"> <span>⚡ Electric Included</span> </label> <label class="checkbox-item"> <input type="checkbox" name="amenity" value="Kitchen Access"> <span>🍳 Kitchen Access</span> </label> <label class="checkbox-item"> <input type="checkbox" name="amenity" value="Parking"> <span>🚗 Parking</span> </label> <label class="checkbox-item"> <input type="checkbox" name="amenity" value="Private Bathroom"> <span>🚿 Private Bathroom</span> </label> <label class="checkbox-item"> <input type="checkbox" name="amenity" value="Pet Friendly"> <span>🐾 Pet Friendly</span> </label>
+       </div>
+      </div>
+      <div class="form-group form-full-width"><label for="property-rules" class="form-label">Rules &amp; Conditions</label> <textarea id="property-rules" class="form-textarea" placeholder="e.g., No smoking, No pets, Curfew at 10 PM..."></textarea>
+      </div>
+      <h3 style="grid-column: 1 / -1; color: var(--color-dark-brown); margin-top: 1rem;">Contact Information</h3>
+      <div class="property-form-grid">
+       <div class="form-group"><label for="landlord-name" class="form-label">Landlord Name</label> <input type="text" id="landlord-name" class="form-input" required readonly>
+       </div>
+       <div class="form-group"><label for="landlord-mobile" class="form-label">Mobile Number</label> <input type="tel" id="landlord-mobile" class="form-input" required>
+       </div>
+      </div>
+      <h3 style="grid-column: 1 / -1; color: var(--color-dark-brown); margin-top: 1rem;">Availability</h3>
+      <div class="property-form-grid">
+       <div class="form-group"><label for="move-in-date" class="form-label">Move-in Date Available</label> <input type="date" id="move-in-date" class="form-input" required>
+       </div>
+       <div class="form-group"><label for="minimum-stay" class="form-label">Minimum Stay</label> <select id="minimum-stay" class="form-select" required> <option value="">Select Duration</option> <option value="1 month">1 month</option> <option value="3 months">3 months</option> <option value="6 months">6 months</option> <option value="1 year">1 year</option> </select>
+       </div>
+      </div>
+      <div class="property-form-grid" style="margin-top: 2rem;"><button type="button" class="action-button secondary" onclick="window.showPage('landlord-dashboard')">Cancel</button> <button type="button" class="action-button secondary" id="save-draft-btn">Save as Draft</button> <button type="button" class="action-button secondary" id="preview-btn">Preview Post</button> <button type="submit" class="action-button">Publish Property</button>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div><!-- Profile Page -->
+  <div id="profile-page" class="page-content">
+   <div class="dashboard-container">
+    <h1 class="page-title">My Profile</h1>
+    <div class="dashboard-section">
+     <form id="profile-form">
+      <div class="property-form-grid">
+       <div class="form-group"><label for="profile-first-name" class="form-label">First Name</label> <input type="text" id="profile-first-name" class="form-input" required>
+       </div>
+       <div class="form-group"><label for="profile-last-name" class="form-label">Last Name</label> <input type="text" id="profile-last-name" class="form-input" required>
+       </div>
+       <div class="form-group"><label for="profile-email" class="form-label">Email Address</label> <input type="email" id="profile-email" class="form-input" required>
+       </div>
+       <div class="form-group"><label for="profile-mobile" class="form-label">Mobile Number</label> <input type="tel" id="profile-mobile" class="form-input" required>
+       </div>
+       <div class="form-group"><label for="profile-role" class="form-label">Role</label> <input type="text" id="profile-role" class="form-input" readonly>
+       </div>
+       <div class="form-group"><label for="profile-status" class="form-label">Status</label> <input type="text" id="profile-status" class="form-input" readonly>
+       </div>
+      </div>
+      <h3 style="color: var(--color-dark-brown); margin-top: 2rem; margin-bottom: 1rem;">Change Password</h3>
+      <div class="property-form-grid">
+       <div class="form-group"><label for="current-password" class="form-label">Current Password</label> <input type="password" id="current-password" class="form-input">
+       </div>
+       <div class="form-group"><label for="new-password" class="form-label">New Password</label> <input type="password" id="new-password" class="form-input">
+       </div>
+       <div class="form-group form-full-width"><label for="confirm-new-password" class="form-label">Confirm New Password</label> <input type="password" id="confirm-new-password" class="form-input">
+       </div>
+      </div>
+      <div class="property-form-grid" style="margin-top: 2rem;"><button type="button" class="action-button secondary" onclick="window.goBackToDashboard()">Cancel</button> <button type="submit" class="action-button">Save Changes</button>
+      </div>
+     </form>
+    </div>
+   </div>
+  </div><!-- Help Page -->
+  <div id="help-page" class="page-content">
+   <h1 class="page-title">HousinGo Help Center</h1>
+   <div class="about-content">
+    <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">Welcome to HousinGo Help Center! Here, you'll find answers to common questions and guides on how to use our website easily.</p>
+    <h2 style="color: var(--color-primary); margin-bottom: 1.5rem;">Frequently Asked Questions (FAQ)</h2>
+    <div class="faq-item"><button class="faq-question">1. How to Register and Log In</button>
+     <div class="faq-answer">
+      <p>To start using HousinGo, you need to create an account first.</p>
+      <h4>Steps to Register:</h4>
+      <ol class="faq-steps">
+       <li>Click on the "Register" button on the top menu.</li>
+       <li>Fill out the required fields: First Name, Last Name, Email Address, Mobile Number, and Password.</li>
+       <li>Click "Submit" or "Create Account."</li>
+       <li>You will receive a confirmation email — open it and verify your account.</li>
+      </ol>
+      <h4>To Log In:</h4>
+      <ol class="faq-steps">
+       <li>Click "Log In" on the menu.</li>
+       <li>Enter your registered email and password.</li>
+       <li>You can also choose "Continue with Facebook" or "Continue with Google" for faster access.</li>
+      </ol>
+      <p><strong>Tip:</strong> Always keep your password private and never share it with anyone.</p>
+     </div>
+    </div>
+    <div class="faq-item"><button class="faq-question">2. How to Post a Property</button>
+     <div class="faq-answer">
+      <p>If you are a landlord or property owner, you can easily post your available space.</p>
+      <h4>Steps to Post:</h4>
+      <ol class="faq-steps">
+       <li>Log in to your Landlord Account.</li>
+       <li>Click "Post Property" on your dashboard.</li>
+       <li>Fill in all details such as: 
+        <ul>
+         <li>Property Type (Bed Spacer, Room, Apartment, Single Family, etc.)</li>
+         <li>Location and Address</li>
+         <li>Monthly Rent Price</li>
+         <li>Photos of the property</li>
+         <li>Description (amenities, rules, nearby places, etc.)</li>
+        </ul></li>
+       <li>Click "Submit" to post your property.</li>
+       <li>Wait for admin approval before it becomes visible to tenants.</li>
+      </ol>
+      <p><strong>Tip:</strong> Upload clear and real photos to attract more tenants.</p>
+     </div>
+    </div>
+    <div class="faq-item"><button class="faq-question">3. How to Contact a Landlord</button>
+     <div class="faq-answer">
+      <p>If you're a tenant interested in a property:</p>
+      <ol class="faq-steps">
+       <li>Go to the property page you like.</li>
+       <li>Click the "Contact Landlord" button.</li>
+       <li>You can send a message through the system or see the contact details (if available).</li>
+       <li>Wait for the landlord to respond via your registered email or in your account inbox.</li>
+      </ol>
+      <p><strong>Tip:</strong> Be polite and include important details like your move-in date or budget.</p>
+     </div>
+    </div>
+    <div class="faq-item"><button class="faq-question">4. How to Report a Problem</button>
+     <div class="faq-answer">
+      <p>If you encounter an issue — such as a fake listing, duplicate property, or technical error:</p>
+      <h4>Steps:</h4>
+      <ol class="faq-steps">
+       <li>Click "Contact Us" on the main menu.</li>
+       <li>Fill out the form: 
+        <ul>
+         <li>Name</li>
+         <li>Email</li>
+         <li>Subject (e.g., "Fake Listing Report")</li>
+         <li>Message (describe the issue clearly)</li>
+        </ul></li>
+       <li>Click "Send."</li>
+       <li>The admin team will review your report and contact you if needed.</li>
+      </ol>
+      <p>You can also email us directly at: <strong>support@housingo.ph</strong></p>
+     </div>
+    </div>
+    <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background-color: var(--color-background); border-radius: 8px;">
+     <h3>💬 Still Need Help?</h3>
+     <p>If your question isn't listed here, feel free to reach out using our Contact Us page. Our team is always ready to assist you. 💙</p>
+    </div>
+   </div>
+  </div>
+  <div class="modal" id="property-modal">
+   <div class="modal-content"><button class="modal-close" id="modal-close">×</button>
+    <div class="modal-images" id="modal-images">
+     🏠
+    </div>
+    <div class="modal-body">
+     <div class="modal-header"><span class="property-type" id="modal-type"></span>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <p class="modal-location" id="modal-location"></p>
+      <div class="modal-price" id="modal-price"></div>
+     </div>
+     <div class="modal-section">
+      <h3 class="modal-section-title">Description</h3>
+      <p id="modal-description"></p>
+     </div>
+     <div class="modal-section">
+      <h3 class="modal-section-title">Amenities</h3>
+      <div class="amenities-grid" id="modal-amenities"></div>
+     </div>
+     <div class="modal-section">
+      <h3 class="modal-section-title">House Rules</h3>
+      <p id="modal-rules"></p>
+     </div>
+     <div class="modal-section">
+      <h3 class="modal-section-title">Nearby Places</h3>
+      <p id="modal-nearby"></p>
+     </div>
+     <div class="modal-section">
+      <h3 class="modal-section-title">Contact Information</h3>
+      <div class="contact-info">
+       <div class="contact-item">
+        <strong>Contact Person:</strong> <span id="modal-contact-name"></span>
+       </div>
+       <div class="contact-item">
+        <strong>Phone:</strong> <span id="modal-contact-number"></span>
+       </div>
+       <div class="contact-item">
+        <strong>Move-in Date:</strong> <span id="modal-move-in"></span>
+       </div>
+       <div class="contact-item">
+        <strong>Minimum Stay:</strong> <span id="modal-min-stay"></span>
+       </div><button class="contact-button">Contact Landlord</button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <footer class="footer">
+   <div class="footer-content">
+    <p class="footer-text" id="footer-text">© 2025 HousinGo | All Rights Reserved</p>
+    <p>Contact Email: <span id="contact-email">support@housingo.ph</span></p>
+   </div>
+  </footer>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const supabase = createClient(
+      "https://myeqpxnpyurmxqtovdec.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15ZXFweG5weXVybXhxdG92ZGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1MzA0MzgsImV4cCI6MjA3ODEwNjQzOH0.X5aSsAzjvHvaaiOjM9f_M7gajFOpobn3IX623WFUzBA"
+    );
+
+    const amenityIcons = {
+      'Wi-Fi': '📶',
+      'Aircon': '❄️',
+      'Water Included': '💧',
+      'Electric Included': '⚡',
+      'Kitchen Access': '🍳',
+      'Parking': '🚗',
+      'Private Bathroom': '🚿',
+      'Pet Friendly': '🐾'
+    };
+
+    let allProperties = [];
+    let currentFilter = 'all';
+    let currentUser = null;
+    let uploadedImages = [];
+    let editingPropertyId = null;
+    const IMGBB_API_KEY = '047e5bac8e19759cc1c884e08ba14b07';
+
+    const defaultConfig = {
+      site_name: 'HousinGo',
+      tagline: 'Your next home is just a click away.',
+      footer_text: '© 2025 HousinGo | All Rights Reserved',
+      contact_email: 'support@housingo.ph'
+    };
+
+    async function onConfigChange(config) {
+      document.getElementById('site-name').textContent = config.site_name || defaultConfig.site_name;
+      document.getElementById('hero-title').textContent = config.site_name || defaultConfig.site_name;
+      document.getElementById('tagline').textContent = config.tagline || defaultConfig.tagline;
+      document.getElementById('footer-text').textContent = config.footer_text || defaultConfig.footer_text;
+      document.getElementById('contact-email').textContent = config.contact_email || defaultConfig.contact_email;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['site_name', config.site_name || defaultConfig.site_name],
+        ['tagline', config.tagline || defaultConfig.tagline],
+        ['footer_text', config.footer_text || defaultConfig.footer_text],
+        ['contact_email', config.contact_email || defaultConfig.contact_email]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Authentication functions
+    function updateUIForUser(user) {
+      currentUser = user;
+      
+      if (user) {
+        // Hide guest-only elements
+        document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'none');
+        // Show auth-only elements
+        document.querySelectorAll('.auth-only').forEach(el => el.style.display = 'block');
+        
+        // Update user avatar
+        const initials = (user.first_name?.[0] || '') + (user.last_name?.[0] || '');
+        document.getElementById('user-avatar').textContent = initials || 'U';
+        
+        // Update dashboard link based on role
+        const dashboardLink = document.getElementById('dashboard-link');
+        if (user.role === 'Admin') {
+          dashboardLink.onclick = () => showPage('admin-dashboard');
+        } else if (user.role === 'Landlord') {
+          dashboardLink.onclick = () => showPage('landlord-dashboard');
+        } else {
+          dashboardLink.onclick = () => showPage('tenant-dashboard');
+        }
+      } else {
+        // Show guest-only elements
+        document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'block');
+        // Hide auth-only elements
+        document.querySelectorAll('.auth-only').forEach(el => el.style.display = 'none');
+      }
+    }
+
+    // User avatar dropdown
+    document.getElementById('user-avatar').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('user-dropdown').classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => {
+      document.getElementById('user-dropdown').classList.remove('active');
+    });
+
+    document.getElementById('profile-link').addEventListener('click', () => {
+      if (currentUser) {
+        loadProfilePage();
+        showPage('profile');
+      }
+    });
+
+    document.getElementById('logout-link').addEventListener('click', () => {
+      localStorage.removeItem('currentUser');
+      currentUser = null;
+      updateUIForUser(null);
+      showPage('home');
+      showInlineMessage('You have been logged out successfully.');
+    });
+
+    function loadProfilePage() {
+      if (!currentUser) return;
+      
+      document.getElementById('profile-first-name').value = currentUser.first_name || '';
+      document.getElementById('profile-last-name').value = currentUser.last_name || '';
+      document.getElementById('profile-email').value = currentUser.email || '';
+      document.getElementById('profile-mobile').value = currentUser.mobile || '';
+      document.getElementById('profile-role').value = currentUser.role || '';
+      document.getElementById('profile-status').value = currentUser.status || '';
+    }
+
+    window.goBackToDashboard = function() {
+      if (!currentUser) {
+        showPage('home');
+        return;
+      }
+      
+      if (currentUser.role === 'Admin') {
+        showPage('admin-dashboard');
+      } else if (currentUser.role === 'Landlord') {
+        showPage('landlord-dashboard');
+      } else {
+        showPage('tenant-dashboard');
+      }
+    };
+
+    window.showPage = showPage;
+
+    // Check for existing session in localStorage
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        updateUIForUser(userData);
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        localStorage.removeItem('currentUser');
+      }
+    }
+
+    // Dashboard loading functions
+    async function loadAdminDashboard() {
+      if (!currentUser || currentUser.role !== 'Admin') return;
+      
+      try {
+        // Load statistics
+        const { data: properties } = await supabase.from('properties').select('*');
+        const { data: users } = await supabase.from('users').select('*');
+        const pendingProperties = properties?.filter(p => p.status === 'Pending') || [];
+        
+        document.getElementById('admin-total-properties').textContent = properties?.length || 0;
+        document.getElementById('admin-total-users').textContent = users?.length || 0;
+        document.getElementById('admin-pending-properties').textContent = pendingProperties.length;
+        document.getElementById('admin-monthly-views').textContent = Math.floor(Math.random() * 1000);
+        
+        // Load pending properties table
+        const tbody = document.getElementById('admin-pending-tbody');
+        if (pendingProperties.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">📋</div><p>No pending approvals</p></td></tr>';
+        } else {
+          tbody.innerHTML = pendingProperties.map(p => `
+            <tr>
+              <td>${p.type}</td>
+              <td>${p.barangay}, ${p.city}</td>
+              <td>${p.contact_name}</td>
+              <td>₱${parseFloat(p.monthly_rent).toLocaleString()}</td>
+              <td>${new Date(p.created_at).toLocaleDateString()}</td>
+              <td>
+                <button class="action-button secondary" onclick="viewPendingProperty('${p.property_id}')" style="margin-bottom: 0.25rem;">View</button>
+                <button class="action-button" onclick="approveProperty('${p.property_id}')">Approve</button>
+                <button class="action-button danger" onclick="rejectProperty('${p.property_id}')">Reject</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+        
+        // Load users table
+        const usersTbody = document.getElementById('admin-users-tbody');
+        if (!users || users.length === 0) {
+          usersTbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">👥</div><p>No users found</p></td></tr>';
+        } else {
+          usersTbody.innerHTML = users.map(u => `
+            <tr>
+              <td>${u.first_name} ${u.last_name}</td>
+              <td>${u.email}</td>
+              <td>${u.role}</td>
+              <td><span class="status-badge active">${u.status}</span></td>
+              <td>${new Date(u.created_at).toLocaleDateString()}</td>
+              <td>
+                <button class="action-button secondary" onclick="viewUser('${u.user_id}')">View</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+        // Load reports
+        const { data: reports } = await supabase
+          .from('reports')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(10);
+
+        const reportsList = document.getElementById('admin-reports-list');
+        if (!reports || reports.length === 0) {
+          reportsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📝</div><p>No reports or feedback</p></div>';
+        } else {
+          reportsList.innerHTML = reports.map(r => `
+            <div class="message-item">
+              <div class="message-header">
+                <span class="message-sender">${r.subject || 'Report'}</span>
+                <span class="message-time">${new Date(r.created_at).toLocaleDateString()}</span>
+              </div>
+              <div class="message-preview">${r.message?.substring(0, 100) || 'No message'}${r.message?.length > 100 ? '...' : ''}</div>
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Error loading admin dashboard:', error);
+      }
+    }
+
+    async function loadLandlordDashboard() {
+      if (!currentUser || currentUser.role !== 'Landlord') return;
+      
+      try {
+        const { data: properties } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('landlord_id', currentUser.user_id);
+        
+        const availableCount = properties?.filter(p => p.status === 'Approved').length || 0;
+        const occupiedCount = properties?.filter(p => p.status === 'Occupied').length || 0;
+        
+        document.getElementById('landlord-total-properties').textContent = properties?.length || 0;
+        document.getElementById('landlord-available-properties').textContent = availableCount;
+        document.getElementById('landlord-occupied-properties').textContent = occupiedCount;
+        document.getElementById('landlord-messages-count').textContent = 0;
+        
+        const tbody = document.getElementById('landlord-properties-tbody');
+        if (!properties || properties.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">🏠</div><p>No properties posted yet. Click "Post New Property" to get started!</p></td></tr>';
+        } else {
+          tbody.innerHTML = properties.map(p => `
+            <tr>
+              <td>${p.type}</td>
+              <td>${p.barangay}, ${p.city}</td>
+              <td>₱${parseFloat(p.monthly_rent).toLocaleString()}</td>
+              <td><span class="status-badge ${p.status.toLowerCase()}">${p.status}</span></td>
+              <td>${new Date(p.created_at).toLocaleDateString()}</td>
+              <td>
+                ${p.status === 'Draft' ? `<button class="action-button" onclick="publishDraft('${p.property_id}')">Publish</button>` : ''}
+                <button class="action-button secondary" onclick="editProperty('${p.property_id}')">Edit</button>
+                <button class="action-button danger" onclick="deleteProperty('${p.property_id}')">Delete</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+
+        // Load reviews
+        const propertyIds = properties?.map(p => p.property_id) || [];
+        if (propertyIds.length > 0) {
+          const { data: reviews } = await supabase
+            .from('reviews')
+            .select('*, properties(type, barangay, city)')
+            .in('property_id', propertyIds)
+            .order('created_at', { ascending: false });
+
+          const reviewsList = document.getElementById('landlord-reviews-list');
+          if (!reviews || reviews.length === 0) {
+            reviewsList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⭐</div><p>No reviews yet</p></div>';
+          } else {
+            reviewsList.innerHTML = reviews.map(r => `
+              <div style="padding: 1rem; border-bottom: 1px solid var(--color-background);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <strong>${r.properties?.type || 'Property'} in ${r.properties?.city || ''}</strong>
+                  <span style="color: #ffa500;">${'⭐'.repeat(r.rating)}</span>
+                </div>
+                <p style="color: var(--color-text); margin-bottom: 0.5rem;">${r.comment || 'No comment'}</p>
+                <small style="color: #666;">${new Date(r.created_at).toLocaleDateString()}</small>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (error) {
+        console.error('Error loading landlord dashboard:', error);
+      }
+    }
+
+    async function loadTenantDashboard() {
+      if (!currentUser || currentUser.role !== 'Tenant') return;
+      
+      document.getElementById('tenant-saved-count').textContent = 0;
+      document.getElementById('tenant-messages-count').textContent = 0;
+      document.getElementById('tenant-reviews-count').textContent = 0;
+    }
+
+    window.viewPendingProperty = async function(propertyId) {
+      try {
+        const { data: property, error } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('property_id', propertyId)
+          .single();
+
+        if (error) throw error;
+
+        // Fetch amenities
+        const { data: amenities } = await supabase
+          .from('amenities')
+          .select('*')
+          .eq('property_id', propertyId);
+
+        // Fetch images
+        const { data: images } = await supabase
+          .from('property_images')
+          .select('*')
+          .eq('property_id', propertyId);
+
+        // Fetch landlord info
+        let landlordInfo = null;
+        if (property.landlord_id) {
+          const { data: landlord } = await supabase
+            .from('users')
+            .select('first_name, last_name, email, mobile')
+            .eq('user_id', property.landlord_id)
+            .single();
+          landlordInfo = landlord;
+        }
+
+        // Create property object with all details
+        const fullProperty = {
+          ...property,
+          amenities: amenities || [],
+          images: images || [],
+          landlord: landlordInfo
+        };
+
+        // Show property in modal
+        showPropertyModal(fullProperty);
+
+      } catch (error) {
+        console.error('Error viewing pending property:', error);
+        showInlineMessage('Failed to load property details: ' + error.message, 'error');
+      }
+    };
+
+    window.approveProperty = async function(propertyId) {
+      try {
+        const { error } = await supabase
+          .from('properties')
+          .update({ status: 'Approved' })
+          .eq('property_id', propertyId);
+        
+        if (error) throw error;
+        
+        showInlineMessage('Property approved successfully!');
+        loadAdminDashboard();
+        fetchProperties();
+      } catch (error) {
+        showInlineMessage('Failed to approve property: ' + error.message, 'error');
+      }
+    };
+
+    window.rejectProperty = async function(propertyId) {
+      try {
+        const { error } = await supabase
+          .from('properties')
+          .delete()
+          .eq('property_id', propertyId);
+        
+        if (error) throw error;
+        
+        showInlineMessage('Property rejected and removed.');
+        loadAdminDashboard();
+      } catch (error) {
+        showInlineMessage('Failed to reject property: ' + error.message, 'error');
+      }
+    };
+
+    window.editProperty = async function(propertyId) {
+      try {
+        const { data: property, error } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('property_id', propertyId)
+          .single();
+
+        if (error) throw error;
+
+        // Load amenities
+        const { data: amenities } = await supabase
+          .from('amenities')
+          .select('*')
+          .eq('property_id', propertyId);
+
+        // Load images
+        const { data: images } = await supabase
+          .from('property_images')
+          .select('*')
+          .eq('property_id', propertyId);
+
+        // Set editing mode
+        editingPropertyId = propertyId;
+
+        // Fill form with property data
+        document.getElementById('property-type').value = property.type || '';
+        document.getElementById('monthly-rent').value = property.monthly_rent || '';
+        document.getElementById('available-slots').value = property.available_slots || '';
+        document.getElementById('property-address').value = property.address || '';
+        document.getElementById('property-barangay').value = property.barangay || '';
+        document.getElementById('property-city').value = property.city || '';
+        document.getElementById('nearby-landmarks').value = property.nearby_landmarks || '';
+        document.getElementById('loc-link').value = property.loc_link || '';
+        document.getElementById('property-description').value = property.description || '';
+        document.getElementById('property-rules').value = property.rules || '';
+        document.getElementById('landlord-name').value = property.contact_name || '';
+        document.getElementById('landlord-mobile').value = property.contact_number || '';
+        document.getElementById('move-in-date').value = property.move_in_date || '';
+        document.getElementById('minimum-stay').value = property.min_stay || '';
+
+        // Check amenities
+        document.querySelectorAll('input[name="amenity"]').forEach(checkbox => {
+          checkbox.checked = amenities?.some(a => a.amenity_name === checkbox.value) || false;
+        });
+
+        // Clear uploaded images (user will need to re-upload)
+        uploadedImages = [];
+        displayImagePreviews();
+
+        // Show note about images
+        if (images && images.length > 0) {
+          showInlineMessage(`This property has ${images.length} existing image(s). Upload new images to replace them.`);
+        }
+
+        // Change button text
+        const submitButton = document.querySelector('#post-property-form button[type="submit"]');
+        submitButton.textContent = 'Update Property';
+
+        // Navigate to post property page
+        showPage('post-property');
+
+      } catch (error) {
+        console.error('Error loading property for edit:', error);
+        showInlineMessage('Failed to load property: ' + error.message, 'error');
+      }
+    };
+
+    window.publishDraft = async function(propertyId) {
+      try {
+        const { error } = await supabase
+          .from('properties')
+          .update({ status: 'Pending' })
+          .eq('property_id', propertyId);
+        
+        if (error) throw error;
+        
+        showInlineMessage('Draft published successfully! Your property is now pending admin approval.');
+        loadLandlordDashboard();
+        fetchProperties();
+      } catch (error) {
+        console.error('Error publishing draft:', error);
+        showInlineMessage('Failed to publish draft: ' + error.message, 'error');
+      }
+    };
+
+    window.deleteProperty = async function(propertyId) {
+      const confirmDiv = document.createElement('div');
+      confirmDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        z-index: 10001;
+        text-align: center;
+      `;
+      confirmDiv.innerHTML = `
+        <h3 style="margin-bottom: 1rem; color: var(--color-dark-brown);">Delete Property?</h3>
+        <p style="margin-bottom: 1.5rem; color: var(--color-text);">This action cannot be undone.</p>
+        <button id="confirm-delete" class="action-button danger" style="margin-right: 0.5rem;">Delete</button>
+        <button id="cancel-delete" class="action-button secondary">Cancel</button>
+      `;
+
+      const backdrop = document.createElement('div');
+      backdrop.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 10000;
+      `;
+
+      document.body.appendChild(backdrop);
+      document.body.appendChild(confirmDiv);
+
+      document.getElementById('confirm-delete').onclick = async () => {
+        try {
+          await supabase.from('property_images').delete().eq('property_id', propertyId);
+          await supabase.from('amenities').delete().eq('property_id', propertyId);
+          await supabase.from('properties').delete().eq('property_id', propertyId);
+          
+          showInlineMessage('Property deleted successfully');
+          loadLandlordDashboard();
+          fetchProperties();
+        } catch (error) {
+          showInlineMessage('Failed to delete property: ' + error.message, 'error');
+        } finally {
+          backdrop.remove();
+          confirmDiv.remove();
+        }
+      };
+
+      document.getElementById('cancel-delete').onclick = () => {
+        backdrop.remove();
+        confirmDiv.remove();
+      };
+    };
+
+    window.viewUser = async function(userId) {
+      try {
+        const { data: user, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('user_id', userId)
+          .single();
+
+        if (error) throw error;
+
+        const modalDiv = document.createElement('div');
+        modalDiv.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+          z-index: 10001;
+          max-width: 500px;
+          width: 90%;
+          max-height: 90%;
+          overflow-y: auto;
+        `;
+        modalDiv.innerHTML = `
+          <h3 style="margin-bottom: 1.5rem; color: var(--color-dark-brown);">User Details</h3>
+          <div style="margin-bottom: 1rem;">
+            <strong>Name:</strong> ${user.first_name} ${user.last_name}
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <strong>Email:</strong> ${user.email}
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <strong>Mobile:</strong> ${user.mobile || 'N/A'}
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <strong>Role:</strong> ${user.role}
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <strong>Status:</strong> <span class="status-badge active">${user.status}</span>
+          </div>
+          <div style="margin-bottom: 1.5rem;">
+            <strong>Joined:</strong> ${new Date(user.created_at).toLocaleDateString()}
+          </div>
+          <div style="border-top: 2px solid var(--color-background); padding-top: 1.5rem; margin-top: 1.5rem;">
+            <h4 style="margin-bottom: 1rem; color: var(--color-dark-brown);">Admin Actions</h4>
+            <button id="reset-password-btn" class="action-button" style="width: 100%; margin-bottom: 0.5rem;">
+              🔑 Reset Password to "pass1234"
+            </button>
+            <button id="toggle-status-btn" class="action-button ${user.status === 'Active' ? 'danger' : ''}" style="width: 100%; margin-bottom: 1rem;">
+              ${user.status === 'Active' ? '🚫 Deactivate Account' : '✅ Activate Account'}
+            </button>
+          </div>
+          <button id="close-user-modal" class="action-button secondary" style="width: 100%;">Close</button>
+        `;
+
+        const backdrop = document.createElement('div');
+        backdrop.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.5);
+          z-index: 10000;
+        `;
+
+        document.body.appendChild(backdrop);
+        document.body.appendChild(modalDiv);
+
+        // Reset password handler
+        document.getElementById('reset-password-btn').onclick = async () => {
+          const resetBtn = document.getElementById('reset-password-btn');
+          resetBtn.disabled = true;
+          resetBtn.textContent = 'Resetting...';
+          
+          try {
+            const { error: updateError } = await supabase
+              .from('users')
+              .update({ password: 'pass1234' })
+              .eq('user_id', userId);
+            
+            if (updateError) throw updateError;
+            
+            showInlineMessage('Password reset to "pass1234" successfully!');
+            backdrop.remove();
+            modalDiv.remove();
+          } catch (err) {
+            showInlineMessage('Failed to reset password: ' + err.message, 'error');
+            resetBtn.disabled = false;
+            resetBtn.textContent = '🔑 Reset Password to "pass1234"';
+          }
+        };
+
+        // Toggle status handler
+        document.getElementById('toggle-status-btn').onclick = async () => {
+          const toggleBtn = document.getElementById('toggle-status-btn');
+          toggleBtn.disabled = true;
+          toggleBtn.textContent = 'Updating...';
+          
+          try {
+            const newStatus = user.status === 'Active' ? 'Inactive' : 'Active';
+            const { error: updateError } = await supabase
+              .from('users')
+              .update({ status: newStatus })
+              .eq('user_id', userId);
+            
+            if (updateError) throw updateError;
+            
+            showInlineMessage(`Account ${newStatus === 'Active' ? 'activated' : 'deactivated'} successfully!`);
+            loadAdminDashboard();
+            backdrop.remove();
+            modalDiv.remove();
+          } catch (err) {
+            showInlineMessage('Failed to update account status: ' + err.message, 'error');
+            toggleBtn.disabled = false;
+            toggleBtn.textContent = user.status === 'Active' ? '🚫 Deactivate Account' : '✅ Activate Account';
+          }
+        };
+
+        document.getElementById('close-user-modal').onclick = () => {
+          backdrop.remove();
+          modalDiv.remove();
+        };
+
+        backdrop.onclick = () => {
+          backdrop.remove();
+          modalDiv.remove();
+        };
+
+      } catch (error) {
+        console.error('Error viewing user:', error);
+        showInlineMessage('Failed to load user details: ' + error.message, 'error');
+      }
+    };
+
+    async function fetchProperties() {
+      try {
+        // First, fetch all approved properties using correct table name
+        const { data: properties, error: propError } = await supabase
+          .from('properties')
+          .select('*')
+          .eq('status', 'Approved');
+
+        if (propError) {
+          console.error('Property fetch error:', propError);
+          throw propError;
+        }
+
+        // If no properties found, still show empty state
+        if (!properties || properties.length === 0) {
+          allProperties = [];
+          displayProperties(allProperties);
+          document.getElementById('loading').style.display = 'none';
+          return;
+        }
+
+        // Fetch additional details for each property
+        const propertiesWithDetails = await Promise.all(
+          properties.map(async (property) => {
+            try {
+              // Fetch amenities for this property
+              const { data: amenities, error: amenitiesError } = await supabase
+                .from('amenities')
+                .select('*')
+                .eq('property_id', property.property_id)
+                .eq('is_included', true);
+
+              if (amenitiesError) {
+                console.warn('Amenities fetch error for property', property.property_id, amenitiesError);
+              }
+
+              // Fetch images for this property
+              const { data: images, error: imagesError } = await supabase
+                .from('property_images')
+                .select('*')
+                .eq('property_id', property.property_id)
+                .limit(1);
+
+              if (imagesError) {
+                console.warn('Images fetch error for property', property.property_id, imagesError);
+              }
+
+              // Try to fetch landlord info if landlord_id exists
+              let landlordInfo = null;
+              if (property.landlord_id) {
+                const { data: landlord, error: landlordError } = await supabase
+                  .from('users')
+                  .select('first_name, last_name, email, mobile')
+                  .eq('user_id', property.landlord_id)
+                  .single();
+
+                if (landlordError) {
+                  console.warn('Landlord fetch error for property', property.property_id, landlordError);
+                } else {
+                  landlordInfo = landlord;
+                }
+              }
+
+              return {
+                ...property,
+                amenities: amenities || [],
+                images: images || [],
+                landlord: landlordInfo
+              };
+            } catch (error) {
+              console.warn('Error fetching details for property', property.property_id, error);
+              return {
+                ...property,
+                amenities: [],
+                images: [],
+                landlord: null
+              };
+            }
+          })
+        );
+
+        allProperties = propertiesWithDetails;
+        displayProperties(allProperties);
+        document.getElementById('loading').style.display = 'none';
+        
+        console.log('Successfully loaded', allProperties.length, 'properties');
+        
+      } catch (error) {
+        console.error('Error fetching properties:', error);
+        document.getElementById('loading').style.display = 'none';
+        
+        // Show more specific error message
+        let errorMessage = 'Unable to load properties. ';
+        if (error.message) {
+          errorMessage += `Error: ${error.message}`;
+        } else {
+          errorMessage += 'Please check your connection and try again.';
+        }
+        
+        showError(errorMessage);
+        
+        // Try to show some sample data as fallback
+        showSampleProperties();
+      }
+    }
+
+    function showSampleProperties() {
+      const sampleProperties = [
+        {
+          property_id: 'sample-1',
+          type: 'Room',
+          city: 'Taguig City',
+          barangay: 'East Rembo',
+          address: 'Sample Address 1',
+          monthly_rent: 8000,
+          description: 'Sample property - database connection issue',
+          amenities: [
+            { amenity_name: 'Wi-Fi' },
+            { amenity_name: 'Aircon' }
+          ],
+          images: [],
+          landlord: null,
+          contact_name: 'Sample Contact',
+          contact_number: 'N/A',
+          rules: 'Sample rules',
+          nearby_landmarks: 'Sample landmarks',
+          move_in_date: 'Flexible',
+          min_stay: '3 months'
+        },
+        {
+          property_id: 'sample-2',
+          type: 'Apartment',
+          city: 'Taguig City',
+          barangay: 'East Rembo',
+          address: 'Sample Address 2',
+          monthly_rent: 15000,
+          description: 'Sample property - database connection issue',
+          amenities: [
+            { amenity_name: 'Kitchen Access' },
+            { amenity_name: 'Parking' }
+          ],
+          images: [],
+          landlord: null,
+          contact_name: 'Sample Contact',
+          contact_number: 'N/A',
+          rules: 'Sample rules',
+          nearby_landmarks: 'Sample landmarks',
+          move_in_date: 'Flexible',
+          min_stay: '6 months'
+        }
+      ];
+      
+      allProperties = sampleProperties;
+      displayProperties(allProperties);
+      
+      // Show additional message about sample data
+      const errorContainer = document.getElementById('error-container');
+      errorContainer.innerHTML += `
+        <div style="background-color: #fff3cd; color: #856404; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
+          <strong>Note:</strong> Showing sample properties due to database connection issue. Please refresh the page to try loading real data.
+        </div>
+      `;
+    }
+
+    function showError(message) {
+      const errorContainer = document.getElementById('error-container');
+      errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+    }
+
+    function displayProperties(properties) {
+      const grid = document.getElementById('properties-grid');
+      
+      if (properties.length === 0) {
+        grid.innerHTML = '<p class="loading">No properties found matching your criteria.</p>';
+        return;
+      }
+
+      grid.innerHTML = properties.map(property => {
+        const amenitiesDisplay = property.amenities.slice(0, 3).map(a => {
+          const icon = amenityIcons[a.amenity_name] || '✓';
+          return `<span class="amenity-tag">${icon} ${a.amenity_name}</span>`;
+        }).join('');
+
+        const moreAmenities = property.amenities.length > 3 ? 
+          `<span class="amenity-tag">+${property.amenities.length - 3} more</span>` : '';
+
+        // Get first image URL or use placeholder
+        const imageUrl = property.images && property.images.length > 0 ? property.images[0].image_url : null;
+        const imageDisplay = imageUrl 
+          ? `<img src="${imageUrl}" alt="Property" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='🏠';">` 
+          : '🏠';
+
+        return `
+          <div class="property-card" data-property-id="${property.property_id}">
+            <div class="property-image">${imageDisplay}</div>
+            <div class="property-info">
+              <span class="property-type">${property.type || 'Property'}</span>
+              <h3 class="property-title">${property.type || 'Property'} in ${property.city || 'City'}</h3>
+              <p class="property-location">📍 ${property.address || ''}, ${property.barangay || ''}, ${property.city || ''}</p>
+              <div class="property-price">₱${parseFloat(property.monthly_rent || 0).toLocaleString()}/month</div>
+              <div class="property-amenities">
+                ${amenitiesDisplay}
+                ${moreAmenities}
+              </div>
+              <button class="view-details-btn">View Details</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.property-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          const propertyId = card.dataset.propertyId;
+          const property = allProperties.find(p => p.property_id === propertyId);
+          if (property) {
+            showPropertyModal(property);
+          }
+        });
+      });
+    }
+
+    function showPropertyModal(property) {
+      const modal = document.getElementById('property-modal');
+      
+      document.getElementById('modal-type').textContent = property.type || 'Property';
+      document.getElementById('modal-title').textContent = `${property.type || 'Property'} in ${property.city || 'City'}`;
+      document.getElementById('modal-location').textContent = `📍 ${property.address || ''}, ${property.barangay || ''}, ${property.city || ''}`;
+      document.getElementById('modal-price').textContent = `₱${parseFloat(property.monthly_rent || 0).toLocaleString()}/month`;
+      document.getElementById('modal-description').textContent = property.description || 'No description available.';
+      document.getElementById('modal-rules').textContent = property.rules || 'No specific rules listed.';
+      document.getElementById('modal-nearby').textContent = property.nearby_landmarks || 'No nearby places listed.';
+      document.getElementById('modal-contact-name').textContent = property.contact_name || 'N/A';
+      document.getElementById('modal-contact-number').textContent = property.contact_number || 'N/A';
+      document.getElementById('modal-move-in').textContent = property.move_in_date || 'Flexible';
+      document.getElementById('modal-min-stay').textContent = property.min_stay || 'N/A';
+
+      // Display images if available
+      const modalImages = document.getElementById('modal-images');
+      if (property.images && property.images.length > 0) {
+        const firstImage = property.images[0].image_url;
+        modalImages.innerHTML = `<img src="${firstImage}" alt="Property" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='🏠';">`;
+        
+        // Add image counter if multiple images
+        if (property.images.length > 1) {
+          modalImages.innerHTML += `<div style="position: absolute; bottom: 1rem; right: 1rem; background: rgba(0,0,0,0.7); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.875rem;">📷 ${property.images.length} photos</div>`;
+        }
+      } else {
+        modalImages.innerHTML = '🏠';
+      }
+
+      const amenitiesGrid = document.getElementById('modal-amenities');
+      amenitiesGrid.innerHTML = property.amenities.map(a => {
+        const icon = amenityIcons[a.amenity_name] || '✓';
+        return `<div class="amenity-item">${icon} ${a.amenity_name}</div>`;
+      }).join('');
+
+      modal.classList.add('active');
+    }
+
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('property-modal').classList.remove('active');
+    });
+
+    document.getElementById('property-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'property-modal') {
+        document.getElementById('property-modal').classList.remove('active');
+      }
+    });
+
+    document.getElementById('filters').addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-button')) {
+        document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        const filter = e.target.dataset.filter;
+        currentFilter = filter;
+        
+        if (filter === 'all') {
+          displayProperties(allProperties);
+        } else {
+          const filtered = allProperties.filter(p => p.type === filter);
+          displayProperties(filtered);
+        }
+      }
+    });
+
+    function performAdvancedSearch() {
+      const location = document.getElementById('location-filter').value.toLowerCase();
+      const type = document.getElementById('type-filter').value;
+      const minPrice = parseFloat(document.getElementById('min-price').value) || 0;
+      const maxPrice = parseFloat(document.getElementById('max-price').value) || Infinity;
+
+      const filtered = allProperties.filter(property => {
+        const matchesLocation = !location || 
+          (property.address || '').toLowerCase().includes(location) ||
+          (property.city || '').toLowerCase().includes(location) ||
+          (property.barangay || '').toLowerCase().includes(location);
+        
+        const matchesType = !type || property.type === type;
+        
+        const price = parseFloat(property.monthly_rent) || 0;
+        const matchesPrice = price >= minPrice && price <= maxPrice;
+        
+        return matchesLocation && matchesType && matchesPrice;
+      });
+
+      displayProperties(filtered);
+    }
+
+    document.getElementById('search-button').addEventListener('click', performAdvancedSearch);
+
+    // CTA Button functionality
+    document.getElementById('browse-properties').addEventListener('click', () => {
+      document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('create-account').addEventListener('click', () => {
+      showPage('register');
+    });
+
+    // Navigation functionality
+    function showPage(pageId) {
+      document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId + '-page').classList.add('active');
+    }
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = e.target.dataset.page;
+        showPage(page);
+        
+        // Close mobile menu when link is clicked
+        const navMenu = document.getElementById('nav-menu');
+        const hamburger = document.getElementById('hamburger');
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+      });
+    });
+
+    // Hamburger menu functionality
+    document.getElementById('hamburger').addEventListener('click', () => {
+      const navMenu = document.getElementById('nav-menu');
+      const hamburger = document.getElementById('hamburger');
+      
+      navMenu.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const navMenu = document.getElementById('nav-menu');
+      const hamburger = document.getElementById('hamburger');
+      
+      if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        navMenu.classList.remove('active');
+        hamburger.classList.remove('active');
+      }
+    });
+
+    // FAQ functionality
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('faq-question')) {
+        const answer = e.target.nextElementSibling;
+        const isActive = answer.classList.contains('active');
+        
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('active'));
+        
+        if (!isActive) {
+          answer.classList.add('active');
+        }
+      }
+    });
+
+    // Form submissions
+    // Image upload handling
+    document.getElementById('image-upload-area').addEventListener('click', () => {
+      document.getElementById('property-images').click();
+    });
+
+    document.getElementById('property-images').addEventListener('change', (e) => {
+      const files = Array.from(e.target.files);
+      const maxSize = 30 * 1024 * 1024; // 30MB in bytes
+      
+      // Check if total images would exceed 10
+      if (uploadedImages.length + files.length > 10) {
+        showInlineMessage('You can only upload up to 10 images', 'error');
+        return;
+      }
+
+      // Check if we have at least 5 images total
+      const totalImages = uploadedImages.length + files.length;
+      if (totalImages < 5) {
+        showInlineMessage('Please upload at least 5 images (up to 10 images allowed)', 'error');
+      }
+
+      // Validate each file
+      for (const file of files) {
+        if (file.size > maxSize) {
+          showInlineMessage(`Image "${file.name}" exceeds 30MB limit`, 'error');
+          continue;
+        }
+        
+        if (!file.type.startsWith('image/')) {
+          showInlineMessage(`"${file.name}" is not a valid image file`, 'error');
+          continue;
+        }
+        
+        if (uploadedImages.length < 10) {
+          uploadedImages.push(file);
+        }
+      }
+
+      displayImagePreviews();
+    });
+
+    function displayImagePreviews() {
+      const grid = document.getElementById('image-preview-grid');
+      grid.innerHTML = uploadedImages.map((file, index) => `
+        <div class="image-preview-item">
+          📷
+          <button type="button" class="image-remove-btn" onclick="removeImage(${index})">×</button>
+        </div>
+      `).join('');
+    }
+
+    window.removeImage = function(index) {
+      uploadedImages.splice(index, 1);
+      displayImagePreviews();
+    };
+
+    async function uploadImageToImgBB(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = async function(e) {
+          try {
+            // Get base64 string without the data:image prefix
+            const base64String = e.target.result.split(',')[1];
+            
+            const formData = new FormData();
+            formData.append('key', IMGBB_API_KEY);
+            formData.append('image', base64String);
+
+            const response = await fetch('https://api.imgbb.com/1/upload', {
+              method: 'POST',
+              body: formData
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+              console.log('✅ Image uploaded successfully:', data.data.display_url);
+              resolve(data.data.display_url);
+            } else {
+              console.error('❌ ImgBB upload failed:', data);
+              reject(new Error('Image upload failed: ' + (data.error?.message || 'Unknown error')));
+            }
+          } catch (error) {
+            console.error('⚠️ Error uploading image:', error);
+            reject(error);
+          }
+        };
+        
+        reader.onerror = function(error) {
+          console.error('Error reading file:', error);
+          reject(new Error('Failed to read image file'));
+        };
+        
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function showInlineMessage(message, type = 'success') {
+      const container = document.querySelector('.dashboard-container') || document.querySelector('.main-content');
+      const messageDiv = document.createElement('div');
+      messageDiv.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        ${type === 'success' ? 'background-color: #d4edda; color: #155724;' : 'background-color: #f8d7da; color: #721c24;'}
+      `;
+      messageDiv.textContent = message;
+      document.body.appendChild(messageDiv);
+      setTimeout(() => messageDiv.remove(), 3000);
+    }
+
+    // Initialize post property form when page loads
+    function initializePostPropertyForm() {
+      if (currentUser && currentUser.role === 'Landlord') {
+        const landlordName = `${currentUser.first_name} ${currentUser.last_name}`;
+        document.getElementById('landlord-name').value = landlordName;
+        document.getElementById('landlord-mobile').value = currentUser.mobile || '';
+      }
+    }
+
+    // Preview property button
+    document.getElementById('preview-btn').addEventListener('click', () => {
+      const propertyData = {
+        type: document.getElementById('property-type').value,
+        monthly_rent: document.getElementById('monthly-rent').value,
+        address: document.getElementById('property-address').value,
+        barangay: document.getElementById('property-barangay').value,
+        city: document.getElementById('property-city').value,
+        description: document.getElementById('property-description').value,
+        amenities: Array.from(document.querySelectorAll('input[name="amenity"]:checked')).map(cb => ({ amenity_name: cb.value })),
+        rules: document.getElementById('property-rules').value,
+        nearby_landmarks: document.getElementById('nearby-landmarks').value,
+        contact_name: document.getElementById('landlord-name').value,
+        contact_number: document.getElementById('landlord-mobile').value,
+        move_in_date: document.getElementById('move-in-date').value,
+        min_stay: document.getElementById('minimum-stay').value
+      };
+      
+      showPropertyModal(propertyData);
+    });
+
+    // Save as draft button
+    document.getElementById('save-draft-btn').addEventListener('click', async () => {
+      if (!currentUser || currentUser.role !== 'Landlord') {
+        showInlineMessage('Only landlords can save property drafts', 'error');
+        return;
+      }
+
+      // Drafts don't require images, but if images are uploaded, validate count
+      if (uploadedImages.length > 0 && (uploadedImages.length < 5 || uploadedImages.length > 10)) {
+        showInlineMessage('If uploading images, please provide between 5 and 10 images', 'error');
+        return;
+      }
+
+      const draftButton = document.getElementById('save-draft-btn');
+      draftButton.disabled = true;
+      draftButton.textContent = 'Saving...';
+
+      try {
+        const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked'))
+          .map(cb => cb.value);
+
+        const { data: property, error: propError } = await supabase
+          .from('properties')
+          .insert([{
+            landlord_id: currentUser.user_id,
+            type: document.getElementById('property-type').value,
+            monthly_rent: parseFloat(document.getElementById('monthly-rent').value) || 0,
+            available_slots: parseInt(document.getElementById('available-slots').value) || 1,
+            address: document.getElementById('property-address').value,
+            barangay: document.getElementById('property-barangay').value,
+            city: document.getElementById('property-city').value,
+            nearby_landmarks: document.getElementById('nearby-landmarks').value,
+            description: document.getElementById('property-description').value,
+            rules: document.getElementById('property-rules').value,
+            contact_name: document.getElementById('landlord-name').value,
+            contact_number: document.getElementById('landlord-mobile').value,
+            move_in_date: document.getElementById('move-in-date').value,
+            min_stay: document.getElementById('minimum-stay').value,
+            status: 'Draft'
+          }])
+          .select()
+          .single();
+
+        if (propError) throw propError;
+
+        if (selectedAmenities.length > 0) {
+          const amenitiesData = selectedAmenities.map(amenity => ({
+            property_id: property.property_id,
+            amenity_name: amenity,
+            is_included: true
+          }));
+
+          await supabase.from('amenities').insert(amenitiesData);
+        }
+
+        showInlineMessage('Property saved as draft successfully!');
+        document.getElementById('post-property-form').reset();
+        uploadedImages = [];
+        displayImagePreviews();
+        showPage('landlord-dashboard');
+        loadLandlordDashboard();
+        
+      } catch (error) {
+        console.error('Error saving draft:', error);
+        showInlineMessage('Failed to save draft: ' + error.message, 'error');
+      } finally {
+        draftButton.disabled = false;
+        draftButton.textContent = 'Save as Draft';
+      }
+    });
+
+    // Post property form submission
+    document.getElementById('post-property-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!currentUser || currentUser.role !== 'Landlord') {
+        showInlineMessage('Only landlords can post properties', 'error');
+        return;
+      }
+
+      // Validate image count (only for new properties, not edits)
+      if (!editingPropertyId && (uploadedImages.length < 5 || uploadedImages.length > 10)) {
+        showInlineMessage('Please upload between 5 and 10 images', 'error');
+        return;
+      }
+
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Publishing...';
+
+      try {
+        const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked'))
+          .map(cb => cb.value);
+
+        const propertyData = {
+          landlord_id: currentUser.user_id,
+          type: document.getElementById('property-type').value,
+          monthly_rent: parseFloat(document.getElementById('monthly-rent').value),
+          available_slots: parseInt(document.getElementById('available-slots').value),
+          address: document.getElementById('property-address').value,
+          barangay: document.getElementById('property-barangay').value,
+          city: document.getElementById('property-city').value,
+          nearby_landmarks: document.getElementById('nearby-landmarks').value,
+          loc_link: document.getElementById('loc-link').value,
+          description: document.getElementById('property-description').value,
+          rules: document.getElementById('property-rules').value,
+          contact_name: document.getElementById('landlord-name').value,
+          contact_number: document.getElementById('landlord-mobile').value,
+          move_in_date: document.getElementById('move-in-date').value,
+          min_stay: document.getElementById('minimum-stay').value,
+          status: editingPropertyId ? undefined : 'Pending'
+        };
+
+        let property;
+        if (editingPropertyId) {
+          // Update existing property
+          const { data, error: propError } = await supabase
+            .from('properties')
+            .update(propertyData)
+            .eq('property_id', editingPropertyId)
+            .select()
+            .single();
+          
+          if (propError) throw propError;
+          property = data;
+
+          // Delete existing amenities
+          await supabase.from('amenities').delete().eq('property_id', editingPropertyId);
+          
+          // Delete existing images
+          await supabase.from('property_images').delete().eq('property_id', editingPropertyId);
+        } else {
+          // Insert new property
+          const { data, error: propError } = await supabase
+            .from('properties')
+            .insert([propertyData])
+            .select()
+            .single();
+
+          if (propError) throw propError;
+          property = data;
+        }
+
+        // Insert amenities
+        if (selectedAmenities.length > 0) {
+          const amenitiesData = selectedAmenities.map(amenity => ({
+            property_id: property.property_id,
+            amenity_name: amenity,
+            is_included: true
+          }));
+
+          const { error: amenitiesError } = await supabase.from('amenities').insert(amenitiesData);
+          
+          if (amenitiesError) {
+            console.error('❌ Failed to save amenities:', amenitiesError);
+            showInlineMessage('Warning: Property saved but amenities failed to save: ' + amenitiesError.message, 'error');
+          } else {
+            console.log('✅ Amenities saved successfully');
+          }
+        }
+
+        // Upload images to ImgBB and save URLs
+        if (uploadedImages.length > 0) {
+          submitButton.textContent = `Uploading images (0/${uploadedImages.length})...`;
+          
+          let successCount = 0;
+          let failCount = 0;
+          
+          for (let i = 0; i < uploadedImages.length; i++) {
+            const file = uploadedImages[i];
+            submitButton.textContent = `Uploading images (${i + 1}/${uploadedImages.length})...`;
+            
+            try {
+              console.log(`⏳ Uploading image ${i + 1}/${uploadedImages.length}: ${file.name}`);
+              const imageUrl = await uploadImageToImgBB(file);
+              
+              // Save image URL to database
+              const { error: imageError } = await supabase.from('property_images').insert([{
+                property_id: property.property_id,
+                image_url: imageUrl
+              }]);
+              
+              if (imageError) {
+                console.error('❌ Failed to save image URL to database:', imageError);
+                showInlineMessage(`Failed to save image ${i + 1} to database: ${imageError.message}`, 'error');
+                failCount++;
+              } else {
+                console.log(`✅ Image ${i + 1} saved to database successfully`);
+                successCount++;
+              }
+            } catch (imgError) {
+              console.error(`❌ Failed to upload image ${i + 1}:`, imgError);
+              showInlineMessage(`Failed to upload image ${i + 1}: ${imgError.message}`, 'error');
+              failCount++;
+            }
+          }
+          
+          if (successCount > 0) {
+            console.log(`✅ Successfully uploaded ${successCount} out of ${uploadedImages.length} images`);
+          }
+          
+          if (failCount > 0) {
+            showInlineMessage(`Warning: ${failCount} out of ${uploadedImages.length} images failed to upload`, 'error');
+          }
+        }
+
+        const message = editingPropertyId 
+          ? 'Property updated successfully!' 
+          : '🎉 Property posted successfully! Your listing is now pending admin approval. You will be notified once it\'s approved.';
+        
+        showInlineMessage(message);
+        document.getElementById('post-property-form').reset();
+        uploadedImages = [];
+        editingPropertyId = null;
+        displayImagePreviews();
+        showPage('landlord-dashboard');
+        loadLandlordDashboard();
+        fetchProperties();
+        
+      } catch (error) {
+        console.error('Error posting property:', error);
+        showInlineMessage('Failed to post property: ' + error.message, 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = editingPropertyId ? 'Update Property' : 'Publish Property';
+      }
+    });
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Logging in...';
+      
+      try {
+        // Simple login simulation - check if user exists in database
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('email', email)
+          .eq('password', password)
+          .single();
+        
+        if (userError || !userData) {
+          throw new Error('Invalid email or password');
+        }
+        
+        // Store user in localStorage for session persistence
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        
+        updateUIForUser(userData);
+        showInlineMessage('Login successful! Welcome back to HousinGo.');
+        
+        // Redirect to appropriate dashboard
+        if (userData.role === 'Admin') {
+          showPage('admin-dashboard');
+          loadAdminDashboard();
+        } else if (userData.role === 'Landlord') {
+          showPage('landlord-dashboard');
+          loadLandlordDashboard();
+        } else {
+          showPage('tenant-dashboard');
+          loadTenantDashboard();
+        }
+      } catch (error) {
+        showInlineMessage('Login failed: ' + error.message, 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Log In';
+      }
+    });
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const firstName = document.getElementById('first-name').value;
+      const lastName = document.getElementById('last-name').value;
+      const email = document.getElementById('register-email').value;
+      const mobile = document.getElementById('mobile-number').value;
+      const role = document.getElementById('user-role').value;
+      const password = document.getElementById('register-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      
+      if (password !== confirmPassword) {
+        showInlineMessage('Passwords do not match!', 'error');
+        return;
+      }
+      
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Creating Account...';
+      
+      try {
+        // Check if email already exists
+        const { data: existingUser } = await supabase
+          .from('users')
+          .select('email')
+          .eq('email', email)
+          .single();
+        
+        if (existingUser) {
+          throw new Error('Email already registered');
+        }
+        
+        // Insert new user directly into database
+        const { data: newUser, error: insertError } = await supabase
+          .from('users')
+          .insert([{
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            mobile: mobile,
+            role: role,
+            password: password,
+            status: 'Active'
+          }])
+          .select()
+          .single();
+        
+        if (insertError) throw insertError;
+        
+        showInlineMessage('Registration successful! You can now log in.');
+        document.getElementById('register-form').reset();
+        showPage('login');
+      } catch (error) {
+        showInlineMessage('Registration failed: ' + error.message, 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Create Account';
+      }
+    });
+
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('contact-name').value;
+      const mobile = document.getElementById('contact-mobile').value;
+      const email = document.getElementById('contact-email').value;
+      const subject = document.getElementById('contact-subject').value;
+      const message = document.getElementById('contact-message').value;
+      
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
+      
+      try {
+        const { error } = await supabase
+          .from('reports')
+          .insert([{
+            user_id: currentUser?.user_id || null,
+            subject: subject,
+            message: `Name: ${name}\nMobile: ${mobile}\nEmail: ${email}\n\nMessage: ${message}`
+          }]);
+        
+        if (error) throw error;
+        
+        showInlineMessage('Message sent successfully! We will get back to you soon.');
+        document.getElementById('contact-form').reset();
+      } catch (error) {
+        showInlineMessage('Failed to send message: ' + error.message, 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Message';
+      }
+    });
+
+    // Profile form submission
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!currentUser) {
+        showInlineMessage('You must be logged in to update your profile', 'error');
+        return;
+      }
+
+      const submitButton = e.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Saving...';
+
+      try {
+        const updateData = {
+          first_name: document.getElementById('profile-first-name').value,
+          last_name: document.getElementById('profile-last-name').value,
+          email: document.getElementById('profile-email').value,
+          mobile: document.getElementById('profile-mobile').value
+        };
+
+        // Check if password change is requested
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmNewPassword = document.getElementById('confirm-new-password').value;
+
+        if (currentPassword || newPassword || confirmNewPassword) {
+          if (!currentPassword) {
+            throw new Error('Please enter your current password');
+          }
+          
+          if (currentPassword !== currentUser.password) {
+            throw new Error('Current password is incorrect');
+          }
+          
+          if (!newPassword || !confirmNewPassword) {
+            throw new Error('Please enter and confirm your new password');
+          }
+          
+          if (newPassword !== confirmNewPassword) {
+            throw new Error('New passwords do not match');
+          }
+          
+          updateData.password = newPassword;
+        }
+
+        const { data: updatedUser, error } = await supabase
+          .from('users')
+          .update(updateData)
+          .eq('user_id', currentUser.user_id)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        // Update local storage and current user
+        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+        currentUser = updatedUser;
+        updateUIForUser(updatedUser);
+
+        showInlineMessage('Profile updated successfully!');
+        
+        // Clear password fields
+        document.getElementById('current-password').value = '';
+        document.getElementById('new-password').value = '';
+        document.getElementById('confirm-new-password').value = '';
+        
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        showInlineMessage('Failed to update profile: ' + error.message, 'error');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Save Changes';
+      }
+    });
+
+    // Initialize form when showing post property page
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new MutationObserver(() => {
+        const postPropertyPage = document.getElementById('post-property-page');
+        if (postPropertyPage && postPropertyPage.classList.contains('active')) {
+          initializePostPropertyForm();
+        }
+      });
+
+      observer.observe(document.body, {
+        attributes: true,
+        subtree: true,
+        attributeFilter: ['class']
+      });
+    });
+
+    fetchProperties();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99c4d2d5c64fb9f3',t:'MTc2Mjc3MDA5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
