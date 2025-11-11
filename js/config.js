@@ -1,0 +1,22 @@
+// Configuration and constants
+import { CONFIG } from "./secrete";
+
+export const IMGBB_API_KEY = CONFIG.IMGBB_API_KEY;
+
+export const amenityIcons = {
+  'Wi-Fi': '📶',
+  'Aircon': '❄️',
+  'Water Included': '💧',
+  'Electric Included': '⚡',
+  'Kitchen Access': '🍳',
+  'Parking': '🚗',
+  'Private Bathroom': '🚿',
+  'Pet Friendly': '🐾'
+};
+
+export const defaultConfig = {
+  site_name: 'HousinGo',
+  tagline: 'Your next home is just a click away.',
+  footer_text: '© 2025 HousinGo | All Rights Reserved',
+  contact_email: 'support@housingo.ph'
+};
