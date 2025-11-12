@@ -67,7 +67,7 @@ export async function fetchProperties() {
       })
     );
 
-    Object.assign(allProperties, propertiesWithDetails);
+    allProperties.splice(0, allProperties.length, ...propertiesWithDetails);
     displayProperties(allProperties.slice(0, 6), 'home');
     const loading = document.getElementById('loading');
     if (loading) loading.style.display = 'none';
@@ -95,7 +95,15 @@ export function showPropertyModal(property) {
   document.getElementById('modal-move-in').textContent = property.move_in_date || 'Flexible';
   document.getElementById('modal-availability').textContent = property.availability || 'Available';
 
-  // Image carousel with swipe
+  const amenitiesGrid = document.getElementById('modal-amenities');
+  if (property.amenities && property.amenities.length > 0) {
+    amenitiesGrid.innerHTML = property.amenities.map(a => {
+      const icon = amenityIcons[a.amenity_name] || '✓';
+      return `<div class="amenity-item">${icon} ${a.amenity_name}</div>`;
+    }).join('');
+  }
+
+  // Image carousel
   const modalImages = document.getElementById('modal-images');
   let currentImageIndex = 0;
 
@@ -113,50 +121,18 @@ export function showPropertyModal(property) {
     `;
 
     if (property.images.length > 1) {
-      const mainImg = document.getElementById('modal-main-image');
-      const currentImageSpan = document.getElementById('current-image');
-      let touchStartX = 0;
-
       document.getElementById('prev-image').addEventListener('click', () => {
         currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
-        mainImg.src = property.images[currentImageIndex].image_url;
-        currentImageSpan.textContent = currentImageIndex + 1;
+        document.getElementById('modal-main-image').src = property.images[currentImageIndex].image_url;
+        document.getElementById('current-image').textContent = currentImageIndex + 1;
       });
 
       document.getElementById('next-image').addEventListener('click', () => {
         currentImageIndex = (currentImageIndex + 1) % property.images.length;
-        mainImg.src = property.images[currentImageIndex].image_url;
-        currentImageSpan.textContent = currentImageIndex + 1;
-      });
-
-      // Swipe detection
-      modalImages.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-      });
-
-      modalImages.addEventListener('touchend', (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        if (touchStartX - touchEndX > 50) {
-          // Swiped left - next image
-          currentImageIndex = (currentImageIndex + 1) % property.images.length;
-        } else if (touchEndX - touchStartX > 50) {
-          // Swiped right - prev image
-          currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
-        }
-        mainImg.src = property.images[currentImageIndex].image_url;
-        currentImageSpan.textContent = currentImageIndex + 1;
+        document.getElementById('modal-main-image').src = property.images[currentImageIndex].image_url;
+        document.getElementById('current-image').textContent = currentImageIndex + 1;
       });
     }
-  } else {
-    modalImages.innerHTML = '<div style="width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: #f0f0f0;">🏠</div>';
-  }
-
-  const amenitiesGrid = document.getElementById('modal-amenities');
-  if (amenitiesGrid) {
-    amenitiesGrid.innerHTML = property.amenities.map(a => {
-      const icon = amenityIcons[a.amenity_name] || '✓';
-      return `<div class="amenity-item">${icon} ${a.amenity_name}</div>`;
-    }).join('');
   }
 
   // Apply button
@@ -194,7 +170,6 @@ export async function handleApplyProperty(propertyId) {
   }
 
   try {
-    // Check if already applied
     const { data: existingApp } = await supabase
       .from('property_applicants')
       .select('*')

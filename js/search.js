@@ -7,7 +7,10 @@ export let currentFilter = 'all';
 let imageIntervals = {};
 
 export function initializeSearch() {
-  document.getElementById('search-button').addEventListener('click', performAdvancedSearch);
+  const searchButton = document.getElementById('search-button');
+  if (searchButton) {
+    searchButton.addEventListener('click', performAdvancedSearch);
+  }
   
   const browseBtn = document.getElementById('browse-properties');
   if (browseBtn) {
@@ -17,39 +20,21 @@ export function initializeSearch() {
     });
   }
   
-  document.getElementById('filters').addEventListener('click', (e) => {
-    if (e.target.classList.contains('filter-button')) {
-      document.querySelectorAll('#filters .filter-button').forEach(btn => btn.classList.remove('active'));
-      e.target.classList.add('active');
-      
-      const filter = e.target.dataset.filter;
-      currentFilter = filter;
-      
-      if (filter === 'all') {
-        displayProperties(allProperties.slice(0, 6), 'home');
-      } else {
-        const filtered = allProperties.filter(p => p.type === filter);
-        displayProperties(filtered.slice(0, 6), 'home');
-      }
-    }
-  });
-
-  // Browse page filters
-  const browseFilters = document.getElementById('browse-filters');
-  if (browseFilters) {
-    browseFilters.addEventListener('click', (e) => {
+  const filtersDiv = document.getElementById('filters');
+  if (filtersDiv) {
+    filtersDiv.addEventListener('click', (e) => {
       if (e.target.classList.contains('filter-button')) {
-        document.querySelectorAll('#browse-filters .filter-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('#filters .filter-button').forEach(btn => btn.classList.remove('active'));
         e.target.classList.add('active');
         
         const filter = e.target.dataset.filter;
         currentFilter = filter;
         
         if (filter === 'all') {
-          displayProperties(allProperties, 'browse');
+          displayProperties(allProperties.slice(0, 6), 'home');
         } else {
           const filtered = allProperties.filter(p => p.type === filter);
-          displayProperties(filtered, 'browse');
+          displayProperties(filtered.slice(0, 6), 'home');
         }
       }
     });
@@ -83,7 +68,10 @@ export function displayProperties(properties, pageType = 'home') {
   const gridId = pageType === 'browse' ? 'browse-properties-grid' : 'properties-grid';
   const grid = document.getElementById(gridId);
   
-  if (!grid) return;
+  if (!grid) {
+    console.warn(`Grid with id ${gridId} not found`);
+    return;
+  }
   
   if (properties.length === 0) {
     grid.innerHTML = '<p class="loading">No properties found matching your criteria.</p>';
@@ -146,7 +134,6 @@ export function displayProperties(properties, pageType = 'home') {
 }
 
 function setupHoverCarousel(propertyId, images) {
-  // Clear existing interval if any
   if (imageIntervals[propertyId]) {
     clearInterval(imageIntervals[propertyId]);
   }
@@ -162,28 +149,24 @@ function setupHoverCarousel(propertyId, images) {
   carouselContainer.addEventListener('mouseenter', () => {
     isHovering = true;
     
-    // Clear any existing interval
     if (imageIntervals[propertyId]) {
       clearInterval(imageIntervals[propertyId]);
     }
 
-    // Start carousel on hover
     imageIntervals[propertyId] = setInterval(() => {
       currentIndex = (currentIndex + 1) % images.length;
       carousel.src = images[currentIndex].image_url;
-    }, 2000); // 2 second interval
+    }, 2000);
   });
 
   carouselContainer.addEventListener('mouseleave', () => {
     isHovering = false;
     
-    // Stop carousel when hover ends
     if (imageIntervals[propertyId]) {
       clearInterval(imageIntervals[propertyId]);
       imageIntervals[propertyId] = null;
     }
 
-    // Reset to first image
     currentIndex = 0;
     carousel.src = images[0].image_url;
   });

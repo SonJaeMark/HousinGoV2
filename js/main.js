@@ -15,24 +15,36 @@ window.goBackToDashboard = goBackToDashboard;
 window.performAdvancedSearch = performAdvancedSearch;
 
 // Initialize all modules
-function initializeApp() {
-  initializeElementSDK();
-  initializeAuth();
-  initializeNavigation();
-  initializeSearch();
-  initializeModal();
-  initializeForms();
-  initializePropertyPosting();
-  initializeFAQ();
-  initializePostPropertyForm();
-  
-  // Load initial properties
-  fetchProperties();
+async function initializeApp() {
+  try {
+    console.log('Starting app initialization...');
+    
+    initializeElementSDK();
+    initializeAuth();
+    initializeNavigation();
+    initializeSearch();
+    initializeModal();
+    initializeForms();
+    initializePropertyPosting();
+    initializeFAQ();
+    initializePostPropertyForm();
+    
+    console.log('Fetching properties...');
+    // Load initial properties
+    await fetchProperties();
 
-  // Hamburger mobile menu with CTA button
-  document.getElementById('create-account').addEventListener('click', () => {
-    showPage('register');
-  });
+    // Hamburger mobile menu with CTA button
+    const createAccountBtn = document.getElementById('create-account');
+    if (createAccountBtn) {
+      createAccountBtn.addEventListener('click', () => {
+        showPage('register');
+      });
+    }
+    
+    console.log('App initialized successfully');
+  } catch (error) {
+    console.error('Error initializing app:', error);
+  }
 }
 
 // Initialize when DOM is ready

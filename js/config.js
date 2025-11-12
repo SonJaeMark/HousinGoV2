@@ -1,7 +1,5 @@
 // Configuration and constants
-import { CONFIG } from "./secrete";
-
-export const IMGBB_API_KEY = CONFIG.IMGBB_API_KEY;
+export const IMGBB_API_KEY = '047e5bac8e19759cc1c884e08ba14b07';
 
 export const amenityIcons = {
   'Wi-Fi': '📶',
