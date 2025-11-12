@@ -136,3 +136,12 @@ export async function handleRegister(firstName, lastName, email, mobile, role, p
     return { success: false, error: error.message };
   }
 }
+
+// ensure caller can read current user id/email
+export function getCurrentUser() {
+  return window.currentUserId || localStorage.getItem('hgo_current_user') || null;
+}
+
+export function getCurrentUserEmail() {
+  return window.currentUserEmail || localStorage.getItem('hgo_current_user_email') || null;
+}

@@ -3,6 +3,181 @@ import { supabase } from './supabase-client.js';
 import { allProperties, displayProperties } from './search.js';
 import { amenityIcons } from './config.js';
 import { showInlineMessage } from './ui.js';
+import { getCurrentUser } from './auth.js';
+
+// load available properties to the grid (homepage)
+async function loadAvailablePropertiesToGrid() {
+  const grid = document.getElementById('properties-grid') || document.querySelector('.properties-grid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="loading">Loading properties...</div>';
+
+  const props = typeof window.HousinGoSupabase?.getAvailableProperties === 'function'
+    ? await window.HousinGoSupabase.getAvailableProperties()
+    : [];
+
+  grid.innerHTML = '';
+  props.forEach(p => {
+    const pid = p.property_id || p.id;
+    const card = document.createElement('div');
+    card.className = 'property-card';
+    card.dataset.propertyId = pid;
+    card.innerHTML = `
+      <div class="property-image-carousel">
+        <img src="${p.cover_image || 'assets/placeholder.png'}" alt="${p.title || p.address || 'Property'}">
+      </div>
+      <div class="property-info">
+        <div class="property-type">${p.type || ''}</div>
+        <h3 class="property-title">${p.title || p.address || 'Property'}</h3>
+        <div class="property-location">${p.barangay || ''} ${p.city || ''}</div>
+        <div class="property-price">₱${p.monthly_rent || 'N/A'}</div>
+        <button class="view-details-btn" data-property-id="${pid}">View Details</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  // after rendering, inject hearts and mark favorites (functions already in this file)
+  if (typeof injectHearts === 'function') injectHearts();
+  if (typeof markUserFavorites === 'function') markUserFavorites();
+}
+
+// Wait for DOM
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.getElementById('properties-grid') || document.querySelector('.properties-grid');
+
+  // inject heart into each card (expects .property-card with data-property-id or data-property-id attr)
+  function injectHearts() {
+    if (!grid) return;
+    const cards = grid.querySelectorAll('.property-card');
+    cards.forEach(card => {
+      const pid = card.dataset.propertyId || card.getAttribute('data-property-id') || card.id?.replace('property-card-','');
+      if (!pid) return;
+      if (card.querySelector('.hgo-fav-btn')) return; // already injected
+
+      // container to place button (image area preferred)
+      const imageArea = card.querySelector('.property-image') || card.querySelector('.property-image-carousel') || card;
+      imageArea.style.position = imageArea.style.position || 'relative';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'hgo-fav-btn';
+      btn.dataset.propertyId = pid;
+      btn.setAttribute('aria-label', 'Save to favorites');
+      btn.innerHTML = `<span class="hgo-heart" aria-hidden="true">♡</span>`;
+      // simple inline styles — replace with classes if you use Tailwind
+      btn.style.cssText = 'position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.9); border-radius:50%; padding:6px; border:none; cursor:pointer; z-index:30; font-size:18px;';
+      imageArea.appendChild(btn);
+    });
+  }
+
+  // mark favorites for current user
+  async function markUserFavorites() {
+    const userId = getCurrentUser() || localStorage.getItem('hgo_current_user') || null;
+    // clear any previous marks first (keeps UI accurate for current user)
+    document.querySelectorAll('.hgo-fav-btn.favorited').forEach(b => {
+      b.classList.remove('favorited');
+      const heart = b.querySelector('.hgo-heart');
+      if (heart) heart.textContent = '♡';
+    });
+
+    if (!userId) return;
+    try {
+      const favIds = await window.HousinGoSupabase.getFavoritesByUser(userId);
+      if (!favIds || !favIds.length) return;
+      favIds.forEach(id => {
+        const btn = document.querySelector(`.hgo-fav-btn[data-property-id="${id}"]`);
+        if (btn) {
+          btn.classList.add('favorited');
+          btn.querySelector('.hgo-heart').textContent = '❤';
+        }
+      });
+    } catch (err) {
+      console.warn('markUserFavorites error', err);
+    }
+  }
+
+  // UI-only: unheart all property cards (do not change DB)
+  function unheartAll() {
+    document.querySelectorAll('.hgo-fav-btn.favorited').forEach(btn => {
+      btn.classList.remove('favorited');
+      const heart = btn.querySelector('.hgo-heart');
+      if (heart) heart.textContent = '♡';
+    });
+  }
+
+  // Listen for login/logout changes via localStorage (works across tabs)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'hgo_current_user') {
+      // user logged out in another tab (newValue === null) -> unheart all
+      if (!e.newValue) {
+        unheartAll();
+      } else {
+        // user logged in in another tab -> refresh favorites for that user
+        markUserFavorites();
+      }
+    }
+  });
+
+  // also listen for an in-page custom event if your app dispatches it on login/logout
+  window.addEventListener('hgo:userChanged', (ev) => {
+    const newUser = ev?.detail?.userId || null;
+    if (!newUser) unheartAll();
+    else markUserFavorites();
+  });
+
+  // handle clicks (event delegation)
+  document.body.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.hgo-fav-btn');
+    if (!btn) return;
+    e.preventDefault();
+    const propertyId = btn.dataset.propertyId;
+    // always check current user right before changing UI or calling API
+    const userId = getCurrentUser() || localStorage.getItem('hgo_current_user') || null;
+    if (!userId) {
+      alert('Please log in to save favorites.');
+      return;
+    }
+
+    // optimistic toggle (UI only until server confirms)
+    const wasFavorited = btn.classList.contains('favorited');
+    btn.disabled = true;
+    btn.classList.toggle('favorited', !wasFavorited);
+    btn.querySelector('.hgo-heart').textContent = wasFavorited ? '♡' : '❤';
+
+    try {
+      const res = await window.HousinGoSupabase.toggleFavorite(userId, propertyId);
+      // ensure UI matches server
+      if (res?.isFavorited) {
+        btn.classList.add('favorited');
+        btn.querySelector('.hgo-heart').textContent = '❤';
+      } else {
+        btn.classList.remove('favorited');
+        btn.querySelector('.hgo-heart').textContent = '♡';
+      }
+    } catch (err) {
+      // revert UI on error
+      btn.classList.toggle('favorited', wasFavorited);
+      btn.querySelector('.hgo-heart').textContent = wasFavorited ? '❤' : '♡';
+      console.error('Unable to toggle favorite', err);
+      alert('Unable to update favorite. See console for details.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // initial run
+  injectHearts();
+  markUserFavorites();
+
+  // observe grid for changes (e.g., search results)
+  if (grid) {
+    const obs = new MutationObserver(() => {
+      injectHearts();
+      markUserFavorites();
+    });
+    obs.observe(grid, { childList: true, subtree: true });
+  }
+});
 
 export async function fetchProperties() {
   try {
@@ -257,11 +432,10 @@ window.submitApplication = async function(propertyId, userId) {
 
     if (error) throw error;
 
-    showInlineMessage('Application submitted successfully! The landlord will review your application.');
-    closeApplicationModal();
-    document.getElementById('property-modal').classList.remove('active');
+    showInlineMessage('Application submitted successfully!', 'success');
+    setTimeout(closeApplicationModal, 2000);
   } catch (error) {
     console.error('Error submitting application:', error);
-    showInlineMessage('Failed to submit application: ' + error.message, 'error');
+    showInlineMessage('Error submitting application. Please try again later.', 'error');
   }
 };
